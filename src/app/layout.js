@@ -1,3 +1,4 @@
+import CommonLayout from "../components/layout/layout";
 import "./globals.css";
 
 export const metadata = {
@@ -8,7 +9,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="">{children}</body>
+      <body>
+        <CommonLayout>{children}</CommonLayout>
+      </body>
     </html>
   );
 }
