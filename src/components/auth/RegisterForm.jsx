@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Key, Mail, User } from "lucide-react";
+import { Eye, EyeOff, Key, Mail, User } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -18,6 +18,7 @@ const schema = z.object({
 
 export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -27,7 +28,6 @@ export default function RegisterForm() {
     resolver: zodResolver(schema),
   });
 
-  
   return (
     <>
       <form>
@@ -57,10 +57,17 @@ export default function RegisterForm() {
             <Input
               {...register("password")}
               disabled={isLoading}
-              type="password"
+              type={showPassword ? "text" : "password"}
               className="border border-gray-300 py-4.5 pl-8 text-balance text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
               placeholder="Enter password"
             />
+            <button
+              className="absolute top-2 right-4.5 h-4 w-4 cursor-pointer text-gray-600"
+              onClick={() => setShowPassword((prev) => !prev)}
+              type="button"
+            >
+              {showPassword ? <Eye /> : <EyeOff />}
+            </button>
           </div>
           <Button
             type="submit"
