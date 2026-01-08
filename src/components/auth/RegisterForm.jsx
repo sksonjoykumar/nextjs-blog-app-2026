@@ -1,14 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 import { registerUserAction } from "@/src/actions/register";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Key, Mail, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
 import * as z from "zod";
 
 // schema
@@ -32,6 +31,9 @@ export default function RegisterForm() {
     resolver: zodResolver(schema),
   });
 
+  const router = useRouter();
+
+  // onSubmit function
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
@@ -42,6 +44,10 @@ export default function RegisterForm() {
       console.log("result", result);
 
       if (result.success) {
+        toast.success("Registration successfully", {
+          description: result.success,
+        });
+        router.push("/login");
       } else {
         throw new Error(result.error || "Something went wrong!");
       }

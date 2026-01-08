@@ -1,8 +1,10 @@
 "use server";
 import { request } from "@arcjet/next";
+import bcrypt from "bcryptjs";
 import { z } from "zod";
 import aj from "../lib/arcjet";
 import connectToDB from "../lib/db";
+import User from "../models/User";
 
 const schema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -70,17 +72,47 @@ export async function registerUserAction(fromData) {
           status: 429,
         };
       }
-    } else {
+    }
+
+    // else {
+    //   return {
+    //     error: "Registration Denied!",
+    //     status: 403,
+    //   };
+    // }
+
+    // database connection
+    await connectToDB();
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return {
-        error: "Registration Denied!",
-        status: 403,
+        error: "User already exists",
+        status: 400,
       };
     }
 
-    // database connection
-    await connectToDB()
-    
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
 
+    const result = new User({
+      name,
+      email,
+      password: hashPassword,
+    });
+
+    await result.save();
+
+    if (result) {
+      return {
+        success: "User registered successfully",
+        status: 201,
+      };
+    } else {
+      return {
+        error: "Interval server error",
+        status: 500,
+      };
+    }
   } catch (error) {
     console.error(`Register Error ${error}`);
     return {
