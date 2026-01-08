@@ -2,24 +2,22 @@
 import { request } from "@arcjet/next";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import aj from "../lib/arcjet";
+import { loginRules } from "../lib/arcjet";
 import connectToDB from "../lib/db";
 import User from "../models/User";
 
 // schema
 const schema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email." }),
+  email: z.string().email({ message: "Please enter a valid email. " }),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long." }),
 });
 
-export async function registerUserAction(fromData) {
+export async function loginUserAction(formData) {
   const validatedFields = schema.safeParse({
-    name: fromData.get("name"),
-    email: fromData.get("email"),
-    password: fromData.get("password"),
+    email: formData.get("email"),
+    password: formData.get("password"),
   });
 
   if (!validatedFields.success) {
@@ -29,16 +27,16 @@ export async function registerUserAction(fromData) {
     };
   }
 
-  const { name, email, password } = validatedFields.data;
+  const { email, password } = validatedFields.data;
 
   try {
     const req = await request();
-    const decision = await aj.protect(req, {
+    const decision = await loginRules.protect(req, {
       email,
     });
-    console.log(decision, "decision");
+    console.log(`Login decision ${decision}`);
 
-    // checking email || bot || ratelimit
+    // checking email || bot || shield
     if (decision.isDenied()) {
       if (decision.reason.isEmail()) {
         const emailTypes = decision.reason.emailTypes;
@@ -59,61 +57,53 @@ export async function registerUserAction(fromData) {
           };
         } else {
           return {
-            error: "Email address are not accepted! Please try again.",
+            error: "Email address are not accepted! Please try again!",
             status: 403,
           };
         }
       } else if (decision.reason.isBot()) {
         return {
-          error: "Bot activity detected!",
+          error: "Bot activity detected! ",
+          status: 403,
+        };
+      } else if (decision.reason.isShield()) {
+        return {
+          error: "Suspicious activity detected!",
           status: 403,
         };
       } else if (decision.reason.isRateLimit()) {
         return {
-          error: "Too many request! Please  try again later!",
-          status: 429,
+          error: "Suspicious activity detected!",
+          status: 403,
         };
       }
     }
 
     // database connection
     await connectToDB();
-    const existingUser = await User.findOne({ email });
-    
-    // user existing 
-    if (existingUser) {
+    const user = User.findOne({ email }).select("+password");
+
+    // user not exist
+    if (!user) {
       return {
-        error: "User already exists",
-        status: 400,
+        error: "Invalid credentials!",
+        status: 401,
       };
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(password, salt);
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
 
-    const result = new User({
-      name,
-      email,
-      password: hashPassword,
-    });
-
-    await result.save();
-
-    if (result) {
+    // password not match
+    if (!isPasswordMatch) {
       return {
-        success: "User registered successfully",
-        status: 201,
-      };
-    } else {
-      return {
-        error: "Interval server error",
-        status: 500,
+        error: "Invalid credentials!",
+        status: 401,
       };
     }
   } catch (error) {
-    console.error(`Register Error ${error}`);
+    console.log(`Login Error ${error}`);
     return {
-      error: "Interval server error!",
+      error: "Too many requests! Please try after some time!",
       status: 500,
     };
   }

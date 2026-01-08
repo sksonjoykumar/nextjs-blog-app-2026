@@ -13,7 +13,7 @@ import * as z from "zod";
 // schema
 const schema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email added." }),
+  email: z.string().email({ message: "Please enter a valid email." }),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long." }),
@@ -22,6 +22,7 @@ const schema = z.object({
 export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -31,7 +32,6 @@ export default function RegisterForm() {
     resolver: zodResolver(schema),
   });
 
-  const router = useRouter();
 
   // onSubmit function
   const onSubmit = async (data) => {
@@ -44,7 +44,7 @@ export default function RegisterForm() {
       console.log("result", result);
 
       if (result.success) {
-        toast.success("Registration successfully", {
+        toast.success("Registration successfully.", {
           description: result.success,
         });
         router.push("/login");
@@ -53,7 +53,7 @@ export default function RegisterForm() {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Registration failed", {
+      toast.error("Registration failed!", {
         description: error.message,
       });
     } finally {
@@ -106,7 +106,7 @@ export default function RegisterForm() {
             disabled={isLoading}
             className="min-w-full cursor-pointer bg-indigo-500 text-white transition duration-100 ease-in-out hover:bg-[#6a67fc]"
           >
-            Submit
+            Register
           </Button>
         </div>
       </form>
