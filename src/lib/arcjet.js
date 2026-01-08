@@ -14,8 +14,8 @@ const aj = arcjet({
       },
       rateLimit: {
         mode: "LIVE",
-        interval: "2m",
-        max: 5,
+        interval: "10m",
+        max: 20,
       },
     }),
   ],

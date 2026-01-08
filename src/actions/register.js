@@ -2,6 +2,7 @@
 import { request } from "@arcjet/next";
 import { z } from "zod";
 import aj from "../lib/arcjet";
+import connectToDB from "../lib/db";
 
 const schema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -33,7 +34,7 @@ export async function registerUserAction(fromData) {
       email,
     });
     console.log(decision, "decision");
-
+    // checking email || bot || ratelimit
     if (decision.isDenied()) {
       if (decision.reason.isEmail()) {
         const emailTypes = decision.reason.emailTypes;
@@ -75,6 +76,11 @@ export async function registerUserAction(fromData) {
         status: 403,
       };
     }
+
+    // database connection
+    await connectToDB()
+    
+
   } catch (error) {
     console.error(`Register Error ${error}`);
     return {
