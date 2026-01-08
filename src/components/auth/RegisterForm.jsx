@@ -1,10 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
+import { registerUserAction } from "@/src/actions/register";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Key, Mail, User } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+
 import * as z from "zod";
 
 // schema
@@ -13,7 +17,7 @@ const schema = z.object({
   email: z.string().email({ message: "Please enter a valid email added." }),
   password: z
     .string()
-    .min(6, { message: "Password must be at least c characters long." }),
+    .min(6, { message: "Password must be at least 6 characters long." }),
 });
 
 export default function RegisterForm() {
@@ -28,9 +32,31 @@ export default function RegisterForm() {
     resolver: zodResolver(schema),
   });
 
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      console.log(data);
+      const formData = new FormData();
+      Object.keys(data).forEach((key) => formData.append(key, data[key]));
+      const result = await registerUserAction(formData);
+      console.log("result", result);
+
+      if (result.success) {
+      } else {
+        throw new Error(result.error || "Something went wrong!");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Registration failed", {
+        description: error.message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-4 space-y-4">
           <div className="relative">
             <User className="absolute top-2 left-1.5 h-5 w-5 text-gray-600" />
