@@ -1,11 +1,17 @@
-"use client";
 import Img from "@/public/images/sign.jpg";
 import RegisterForm from "@/src/components/auth/RegisterForm";
 import { Activity } from "lucide-react";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function Register() {
+export default async function Register() {
+  const token = await (await cookies()).get("token")?.value;
+
+  if (token) {
+    redirect("/");
+  }
   return (
     <>
       <div className="flex min-h-screen w-full flex-col bg-linear-to-br from-gray-100 to-gray-200 md:flex-row">

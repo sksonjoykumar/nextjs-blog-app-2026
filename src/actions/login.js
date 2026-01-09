@@ -1,6 +1,8 @@
 "use server";
 import { request } from "@arcjet/next";
 import bcrypt from "bcryptjs";
+import { SignJWT } from "jose";
+import { cookies } from "next/headers";
 import { z } from "zod";
 import { loginRules } from "../lib/arcjet";
 import connectToDB from "../lib/db";
@@ -34,7 +36,7 @@ export async function loginUserAction(formData) {
     const decision = await loginRules.protect(req, {
       email,
     });
-    console.log(`Login decision ${decision}`);
+    console.log("Login decision:", decision);
 
     // checking email || bot || shield
     if (decision.isDenied()) {
@@ -81,7 +83,7 @@ export async function loginUserAction(formData) {
 
     // database connection
     await connectToDB();
-    const user = User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select("+password");
 
     // user not exist
     if (!user) {
@@ -100,6 +102,32 @@ export async function loginUserAction(formData) {
         status: 401,
       };
     }
+
+    // create token
+    const userToken = await new SignJWT({
+      userId: user._id.toString(),
+      email: user.email,
+      userName: user.name,
+    })
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setExpirationTime("2h")
+      .sign(new TextEncoder().encode(process.env.JWT_SECRET));
+
+    const cookieStore = await cookies();
+
+    cookieStore.set("token", userToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 2,
+      path: "/",
+    });
+
+    return {
+      success: "Logged in successfully",
+      status: 200,
+    };
   } catch (error) {
     console.log(`Login Error ${error}`);
     return {

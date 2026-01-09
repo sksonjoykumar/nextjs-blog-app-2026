@@ -32,7 +32,6 @@ export default function RegisterForm() {
     resolver: zodResolver(schema),
   });
 
-
   // onSubmit function
   const onSubmit = async (data) => {
     setIsLoading(true);

@@ -42,7 +42,7 @@ export const loginRules = arcjet({
     }),
     slidingWindow({
       mode: "LIVE",
-      interval: "5m",
+      interval: "10m",
       max: 5,
     }),
   ],
