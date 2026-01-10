@@ -18,9 +18,9 @@ export default async function Login() {
         <div className="flex w-full items-center justify-center p-8 md:w-1/2 lg:p-12">
           <div className="w-full max-w-md space-y-8 rounded-lg border border-gray-100 p-8 shadow-lg">
             <div className="space-y-2 text-center">
-              <Link href={"/"} className="flex justify-center">
+              <div className="flex justify-center">
                 <Activity className="h-9 w-9 text-indigo-500" />
-              </Link>
+              </div>
               <h1 className="mt-4 text-3xl font-semibold tracking-tight text-gray-700">
                 Login
               </h1>

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function Register() {
-  const token = await (await cookies()).get("token")?.value;
+  const token = (await cookies()).get("token")?.value;
 
   if (token) {
     redirect("/");
@@ -18,9 +18,9 @@ export default async function Register() {
         <div className="flex w-full items-center justify-center p-8 md:w-1/2 lg:p-12">
           <div className="w-full max-w-md space-y-8 rounded-lg border border-gray-200 p-8 shadow-md">
             <div className="space-y-2 text-center">
-              <Link href={"/"} className="flex justify-center">
+              <div className="flex justify-center">
                 <Activity className="h-9 w-9 text-indigo-500" />
-              </Link>
+              </div>
 
               <h1 className="mt-4 text-3xl font-semibold tracking-tight text-gray-700">
                 Register

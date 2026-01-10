@@ -9,15 +9,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { logoutUserAction } from "@/src/actions/logOut";
 import { Activity, LogOut, Menu, Search, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Header() {
   const [toggleMenu, setToggleMenu] = useState(false);
 
   const path = usePathname();
+  const router = useRouter();
+
+  async function handleLogout() {
+    const result = await logoutUserAction();
+    if (result.success) {
+      router.push("/login");
+    } else {
+      console.log(`Logout Error ${error.message}`);
+    }
+  }
 
   return (
     <>
@@ -72,7 +83,7 @@ export default function Header() {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout}>
                     <LogOut className="h-4 w-4" />
                     <span>Log Out</span>
                   </DropdownMenuItem>
