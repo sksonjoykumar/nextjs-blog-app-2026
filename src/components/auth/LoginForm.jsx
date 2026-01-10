@@ -93,6 +93,7 @@ export default function LoginFrom() {
           </div>
           <Button
             type="submit"
+            disabled={isLoading}
             className="min-w-full cursor-pointer bg-indigo-500 text-white transition duration-100 ease-in-out hover:bg-[#6a67fc]"
           >
             Login
