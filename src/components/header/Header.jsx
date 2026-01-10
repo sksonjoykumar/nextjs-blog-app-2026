@@ -1,5 +1,15 @@
 "use client";
-import { Activity, Menu, X } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Activity, LogOut, Menu, Search, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -12,15 +22,21 @@ export default function Header() {
   return (
     <>
       <header className="sticky top-0 z-50">
-        <nav className="relative flex items-center justify-between gap-5 bg-white px-10 py-5 md:px-24">
+        <nav className="relative flex items-center justify-between gap-3 bg-white px-10 py-5 sm:gap-5 md:px-24">
           {/* logo */}
-          <Link
-            onClick={() => setToggleMenu(!toggleMenu)}
-            href={"/"}
-            className="flex justify-center"
-          >
+          <Link href={"/"} className="flex justify-center">
             <Activity className="h-9 w-9 text-indigo-500" />
           </Link>
+
+          {/* blog search  */}
+          <div className="relative w-96">
+            <Search className="absolute top-2 left-1.5 h-5 w-5 text-gray-600" />
+            <Input
+              type="search"
+              className="border border-gray-300 py-4.5 pl-8 text-balance text-gray-900 shadow-none focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
+              placeholder="Search blogs..."
+            />
+          </div>
 
           {/* nav items */}
           <ul className="hidden items-center gap-5 sm:flex md:gap-7">
@@ -45,8 +61,23 @@ export default function Header() {
                 <Link href="/write">Write</Link>
               )}
             </li>
-            <li className="text-base text-gray-900 transition-all duration-300 hover:text-indigo-500">
-              <Link href="/login">Logout</Link>
+            <li className="text-base text-gray-900">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="h-10 w-10 cursor-pointer rounded-full">
+                    <AvatarImage src='https"//github.com/shadcn.png' />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <LogOut className="h-4 w-4" />
+                    <span>Log Out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </li>
           </ul>
 
@@ -108,13 +139,23 @@ export default function Header() {
                     </Link>
                   )}
                 </li>
-                <li className="text-base text-gray-900 transition-all duration-300 hover:text-indigo-500">
-                  <Link
-                    onClick={() => setToggleMenu(!toggleMenu)}
-                    href="/login"
-                  >
-                    Logout
-                  </Link>
+                <li className="text-base text-gray-900">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Avatar className="h-10 w-10 cursor-pointer rounded-full">
+                        <AvatarImage src='https"//github.com/shadcn.png' />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <LogOut className="h-4 w-4" />
+                        <span>Log Out</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </li>
               </ul>
             </div>
