@@ -83,7 +83,7 @@ export async function loginUserAction(formData) {
 
     // database connection
     await connectToDB();
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select("password");
 
     // user not exist
     if (!user) {
@@ -111,7 +111,7 @@ export async function loginUserAction(formData) {
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
-      .setExpirationTime("2h")
+      .setExpirationTime("6h")
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));
 
     const cookieStore = await cookies();

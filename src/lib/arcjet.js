@@ -20,8 +20,8 @@ const aj = arcjet({
       },
       rateLimit: {
         mode: "LIVE",
-        interval: "10m",
-        max: 20,
+        interval: "20m",
+        max: 10,
       },
     }),
   ],
@@ -42,8 +42,8 @@ export const loginRules = arcjet({
     }),
     slidingWindow({
       mode: "LIVE",
-      interval: "10m",
-      max: 5,
+      interval: "20m",
+      max: 10,
     }),
   ],
 });

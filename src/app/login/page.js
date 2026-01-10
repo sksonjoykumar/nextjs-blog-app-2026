@@ -7,7 +7,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function Login() {
-  const token = await (await cookies()).get("token")?.value;
+  const token = (await cookies()).get("token")?.value;
 
   if (token) {
     redirect("/");

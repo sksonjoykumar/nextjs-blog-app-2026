@@ -12,8 +12,8 @@ const inter = Inter();
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className}`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} `}>
         <CommonLayout>{children}</CommonLayout>
         <Toaster position="bottom-right" richColors />
       </body>
