@@ -79,8 +79,8 @@ export async function registerUserAction(fromData) {
     // database connection
     await connectToDB();
     const existingUser = await User.findOne({ email });
-    
-    // user existing 
+
+    // user existing
     if (existingUser) {
       return {
         error: "User already exists",

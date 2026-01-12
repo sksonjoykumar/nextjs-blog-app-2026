@@ -1,27 +1,28 @@
 import arcjet, {
   detectBot,
   protectSignup,
-  shield,
   slidingWindow,
   validateEmail,
 } from "@arcjet/next";
+
+const isProd = process.env.NODE_ENV === "production";
 
 const aj = arcjet({
   key: process.env.ARCJET_KEY,
   rules: [
     protectSignup({
       email: {
-        mode: "LIVE",
+        mode: isProd ? "LIVE" : "DRY_RUN",
         block: ["DISPOSABLE", "INVALID", "NO_MX_RECORDS"],
       },
       bots: {
-        mode: "LIVE",
+        mode: isProd ? "LIVE" : "DRY_RUN",
         allow: [],
       },
       rateLimit: {
-        mode: "LIVE",
-        interval: "50m",
-        max: 10,
+        mode: isProd ? "LIVE" : "DRY_RUN",
+        interval: "10m",
+        max: 20,
       },
     }),
   ],
@@ -32,18 +33,18 @@ export const loginRules = arcjet({
   characteristics: ["ip.src"],
   rules: [
     validateEmail({
-      mode: "LIVE",
+      mode: isProd ? "LIVE" : "DRY_RUN",
       deny: ["DISPOSABLE", "INVALID", "NO_MX_RECORDS"],
     }),
-    shield({ mode: "LIVE" }),
+
     detectBot({
-      mode: "LIVE",
+      mode: isProd ? "LIVE" : "DRY_RUN",
       allow: [],
     }),
     slidingWindow({
-      mode: "LIVE",
-      interval: "50m",
-      max: 10,
+      mode: isProd ? "LIVE" : "DRY_RUN",
+      interval: "1m",
+      max: 5,
     }),
   ],
 });
