@@ -6,6 +6,7 @@ export default async function CreateBlog() {
   const token = (await cookies()).get("token")?.value;
   const user = await verifyAuth(token);
   console.log(user);
+  console.log(user.userName);
   return (
     <>
       <WriteBlogForm user={user} />
