@@ -93,6 +93,9 @@ export default function WriteBlogForm({ user }) {
                 </Select>
               )}
             />
+            <div className="">
+             
+            </div>
           </form>
         </div>
       </main>
