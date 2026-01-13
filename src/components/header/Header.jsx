@@ -76,7 +76,10 @@ export default function Header() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar className="h-10 w-10 cursor-pointer rounded-full">
-                    <AvatarImage src='https"//github.com/shadcn.png' />
+                    <AvatarImage
+                      src="https://img.icons8.com/?size=160&id=fUUEbUbXhzOA&format=png"
+                      alt="user-icon"
+                    />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
@@ -154,7 +157,10 @@ export default function Header() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Avatar className="h-10 w-10 cursor-pointer rounded-full">
-                        <AvatarImage src='https"//github.com/shadcn.png' />
+                        <AvatarImage
+                          src="https://img.icons8.com/?size=160&id=fUUEbUbXhzOA&format=png"
+                          alt="user-icon"
+                        />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
                     </DropdownMenuTrigger>
