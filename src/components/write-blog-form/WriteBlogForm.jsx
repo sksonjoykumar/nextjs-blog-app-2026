@@ -10,6 +10,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
+import UploadFile from "../upload-file/UploadFile";
 
 // blog category
 const blogCategory = [
@@ -94,7 +95,7 @@ export default function WriteBlogForm({ user }) {
               )}
             />
             <div className="">
-             
+              <UploadFile />
             </div>
           </form>
         </div>

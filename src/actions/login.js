@@ -111,7 +111,7 @@ export async function loginUserAction(formData) {
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
-      .setExpirationTime("8h")
+      .setExpirationTime("4h")
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));
 
     const cookieStore = await cookies();
@@ -120,7 +120,7 @@ export async function loginUserAction(formData) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 60 * 60 * 24,
+      maxAge: 60 * 60 * 12,
       path: "/",
     });
 
