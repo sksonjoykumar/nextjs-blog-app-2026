@@ -7,26 +7,51 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { blogCategory } from "@/src/lib/blog-category";
 import { zodResolver } from "@hookform/resolvers/zod";
+import dynamic from "next/dynamic";
+import { useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
+import "react-quill-new/dist/quill.bubble.css";
 import * as z from "zod";
-import ReactQuillComponent from "../react-quill/ReactQuill";
 import UploadFile from "../upload-file/UploadFile";
+import "./style.css";
 
-// blog category
-const blogCategory = [
-  { key: "technology", value: "Technology" },
-  { key: "programming", value: "Programming" },
-  { key: "webDevelopment", value: "Web Development" },
-  { key: "dataScience", value: "Data Science" },
-  { key: "artificialIntelligence", value: "Artificial Intelligence" },
-  { key: "cyberSecurity", value: "Cyber Security" },
-  { key: "cloudComputing", value: "Cloud Computing" },
-  { key: "mobile Development", value: "Mobile Development" },
-  { key: "devops", value: "Devops" },
-  { key: "blockchain", value: "Blockchain" },
-  { key: "digitalMarketing", value: "Digital Marketing" },
-  { key: "videoEditing", value: "Video Editing" },
+const ReactQuill = dynamic(() => import("react-quill-new"), {
+  ssr: false,
+});
+// This modules object configures editor features like toolbar
+const modules = {
+  // toolbar what tools appear in the UI
+  toolbar: [
+    [{ header: [1, 2, 3, 4, 5, 6] }],
+    ["bold", "italic", "underline"],
+    [{ color: [] }, { background: [] }],
+    ["blockquote", "code-block"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ align: [] }],
+    [{ size: ["small", false, "large", "huge"] }],
+    ["link", "image"],
+  ],
+};
+
+// Defines what is preserved in the content when editing
+// (The functionality of the toolbar tools)
+const formats = [
+  "header",
+  "bold",
+  "color",
+  "background",
+  "italic",
+  "underline",
+  "blockquote",
+  "code-block",
+  "list",
+  "bullet",
+  "align",
+  "size",
+  "link",
+  "image",
 ];
 
 // blog Schema
@@ -38,6 +63,8 @@ const blogPostSchema = z.object({
 });
 
 export default function WriteBlogForm({ user }) {
+  const quillRef = useRef(null);
+
   const {
     control,
     handleSubmit,
@@ -67,7 +94,7 @@ export default function WriteBlogForm({ user }) {
                   {...field}
                   type="text"
                   placeholder="Title"
-                  className="mb-8 border-0! pl-0! text-4xl! py-5 font-bold shadow-none placeholder:text-gray-500 focus-visible:ring-0!"
+                  className="mb-8 border-0! py-5 pl-0! text-4xl! font-bold shadow-none placeholder:text-gray-500 focus-visible:ring-0!"
                 />
               )}
             />
@@ -95,16 +122,24 @@ export default function WriteBlogForm({ user }) {
                 </Select>
               )}
             />
-            {/* <Controller
-              name="category"
-              control={control}
-              render={({ field }) => (
-               
-              )}
-            /> */}
-              <UploadFile />
-            <div className="">
-              <ReactQuillComponent />
+
+            <UploadFile />
+            <div className="mt-5 min-h-40 border-t py-2 ">
+              <Controller
+                name="content"
+                control={control}
+                render={({ field }) => (
+                  <ReactQuill
+                    ref={quillRef}
+                    {...field}
+                    onChange={(content) => field.onChange(content)}
+                    theme="bubble"
+                    modules={modules}
+                    formats={formats}
+                    placeholder="Write something here..."
+                  />
+                )}
+              />
             </div>
           </form>
         </div>

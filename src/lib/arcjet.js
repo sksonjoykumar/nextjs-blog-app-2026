@@ -1,6 +1,7 @@
 import arcjet, {
   detectBot,
   protectSignup,
+  shield,
   slidingWindow,
   validateEmail,
 } from "@arcjet/next";
@@ -48,4 +49,19 @@ export const loginRules = arcjet({
     }),
   ],
 });
+
+export const blogPostRules = arcjet({
+  key: process.env.ARCJET_KEY,
+  characteristics: ["ip.src"],
+  rules: [
+    detectBot({
+      mode: isProd ? "LIVE" : "DRY_RUN",
+      allow: [],
+    }),
+    // shield({
+    //   mode: isProd ? "LIVE" : "DRY_RUN",
+    // }),
+  ],
+});
+
 export default aj;
