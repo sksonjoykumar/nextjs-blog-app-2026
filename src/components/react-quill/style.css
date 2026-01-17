@@ -1,0 +1,11 @@
+.my-quill .ql-editor.ql-blank::before {
+  font-size: 2rem;
+  color: #9ca3af;
+  opacity: 1;
+}
+
+.dark .my-quill .ql-editor.ql-blank::before {
+  font-size: 2rem;
+  color: white !important;
+  opacity: 0.5; /* optional */
+}

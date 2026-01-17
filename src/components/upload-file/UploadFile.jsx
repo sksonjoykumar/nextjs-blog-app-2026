@@ -5,6 +5,7 @@ import { useUploadThing } from "@/src/lib/uploadthing";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { toast } from "sonner";
 
 export default function UploadFile() {
   const [file, setFile] = useState(null);
@@ -14,11 +15,17 @@ export default function UploadFile() {
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: (res) => {
       console.log("Upload success:", res);
+      toast.success("Image Upload successfully.", {
+        description: res.success,
+      });
       setFile(null);
       setPreview(null);
     },
     onUploadError: (error) => {
       console.error("Upload error:", error.message);
+      toast.error("Image Upload failed!", {
+        description: error.message,
+      });
     },
   });
 
@@ -56,7 +63,7 @@ export default function UploadFile() {
     <div className="mt-10">
       <div
         {...getRootProps()}
-        className={`mx-auto max-w-lg cursor-pointer rounded-md border p-8 text-center transition ${
+        className={`mx-auto  cursor-pointer rounded-md border p-2 text-center transition lg:p-8 ${
           isDragActive
             ? "border-indigo-500 bg-indigo-50"
             : "border-gray-300 bg-white"
@@ -69,13 +76,13 @@ export default function UploadFile() {
             Drag & drop an image here, or click to select
           </p>
         ) : (
-          <div className="space-y-4">
+          <div className="w-full space-y-4">
             <Image
               src={preview}
               alt="Preview"
               width={500}
-              height={300}
-              className="mx-auto max-h-64 w-full rounded-md border object-cover"
+              height={400}
+              className="mx-auto max-h-96 w-full rounded-md border object-cover object-center"
             />
             <p className="text-sm text-gray-700">{shortName}</p>
           </div>

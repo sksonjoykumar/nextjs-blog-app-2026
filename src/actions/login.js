@@ -111,7 +111,7 @@ export async function loginUserAction(formData) {
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
-      .setExpirationTime("4h")
+      .setExpirationTime("8h")
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));
 
     const cookieStore = await cookies();

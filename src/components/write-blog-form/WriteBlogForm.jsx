@@ -10,6 +10,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
+import ReactQuillComponent from "../react-quill/ReactQuill";
 import UploadFile from "../upload-file/UploadFile";
 
 // blog category
@@ -66,7 +67,7 @@ export default function WriteBlogForm({ user }) {
                   {...field}
                   type="text"
                   placeholder="Title"
-                  className="mb-8 border-0! pl-0! text-4xl! font-bold shadow-none placeholder:text-gray-400 focus-visible:ring-0!"
+                  className="mb-8 border-0! pl-0! text-4xl! py-5 font-bold shadow-none placeholder:text-gray-500 focus-visible:ring-0!"
                 />
               )}
             />
@@ -94,8 +95,16 @@ export default function WriteBlogForm({ user }) {
                 </Select>
               )}
             />
-            <div className="">
+            {/* <Controller
+              name="category"
+              control={control}
+              render={({ field }) => (
+               
+              )}
+            /> */}
               <UploadFile />
+            <div className="">
+              <ReactQuillComponent />
             </div>
           </form>
         </div>
