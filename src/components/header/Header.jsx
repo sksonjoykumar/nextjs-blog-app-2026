@@ -60,17 +60,12 @@ export default function Header() {
             <li className="text-base text-gray-900 transition-all duration-300 hover:text-indigo-500">
               <Link href="/about">About</Link>
             </li>
-            <li className="text-base text-gray-900 transition-all duration-300 hover:text-indigo-500">
-              {path === "/write" ? (
-                <button
-                  className="cursor-pointer rounded-3xl bg-indigo-500 px-4 py-1.5 text-sm text-white transition-all duration-200 hover:bg-indigo-600"
-                  type="button"
-                >
-                  Publish
-                </button>
-              ) : (
-                <Link href="/write">Write</Link>
-              )}
+            <li
+              className={`${path === "/write" ? "hidden" : "block"} text-base text-gray-900 transition-all duration-300 hover:text-indigo-500`}
+            >
+              <Link onClick={() => setToggleMenu(!toggleMenu)} href="/write">
+                Write
+              </Link>
             </li>
             <li className="text-base text-gray-900">
               <DropdownMenu>
@@ -136,22 +131,15 @@ export default function Header() {
                     About
                   </Link>
                 </li>
-                <li className="text-base text-gray-900 transition-all duration-300 hover:text-indigo-500">
-                  {path === "/write" ? (
-                    <button
-                      className="cursor-pointer rounded-3xl bg-indigo-500 px-4 py-1.5 text-sm text-white transition-all duration-200 hover:bg-indigo-600"
-                      type="button"
-                    >
-                      Publish
-                    </button>
-                  ) : (
-                    <Link
-                      onClick={() => setToggleMenu(!toggleMenu)}
-                      href="/write"
-                    >
-                      Write
-                    </Link>
-                  )}
+                <li
+                  className={`${path === "/write" ? "hidden" : "block"} text-base text-gray-900 transition-all duration-300 hover:text-indigo-500`}
+                >
+                  <Link
+                    onClick={() => setToggleMenu(!toggleMenu)}
+                    href="/write"
+                  >
+                    Write
+                  </Link>
                 </li>
                 <li className="text-base text-gray-900">
                   <DropdownMenu>

@@ -1,7 +1,11 @@
 import { request } from "@arcjet/next";
-import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
+import { cookies, headers } from "next/headers";
 import { z } from "zod";
+import { blogPostRules } from "../lib/arcjet";
 import { verifyAuth } from "../lib/auth";
+import connectToDB from "../lib/db";
+import BlogPost from "../models/BlogPost";
 
 // blog Schema
 const blogPostSchema = z.object({
@@ -31,6 +35,60 @@ export async function createBlogPostAction(data) {
 
   try {
     const req = await request();
+    const headersList = await headers();
+    const isSuspicious = headersList.get("x-arcjet-suspicious") === "true";
+
+    const decision = await blogPostRules.protect(req, {
+      shield: {
+        params: {
+          title,
+          content,
+          isSuspicious,
+        },
+      },
+    });
+
+    if (decision.isErrored) {
+      return {
+        error: "An error occurred",
+      };
+    }
+
+    if (decision.isDenied()) {
+      if (decision.reason.isShield()) {
+        return {
+          error:
+            "Input validation failed! Potentially malicious content detected",
+        };
+      }
+
+      if (decision.reason.isBot()) {
+        return {
+          error: "Bot activity detected",
+        };
+      }
+      return {
+        error: "Request denied!",
+      };
+    }
+
+    await connectToDB();
+    const post = new BlogPost({
+      title,
+      content,
+      author: user.userId,
+      coverImage,
+      category,
+      comments: [],
+      upvotes: [],
+    });
+
+    await post.save();
+    revalidatePath("/");
+    return {
+      success: true,
+      post,
+    };
   } catch (error) {
     return {
       error,

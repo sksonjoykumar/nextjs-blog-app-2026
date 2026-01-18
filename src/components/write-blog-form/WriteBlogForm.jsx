@@ -10,13 +10,16 @@ import {
 import { blogCategory } from "@/src/lib/blog-category";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dynamic from "next/dynamic";
-import { useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import "react-quill-new/dist/quill.bubble.css";
+import { toast } from "sonner";
 import * as z from "zod";
 import UploadFile from "../upload-file/UploadFile";
 import "./style.css";
 
+// ReactQuill
 const ReactQuill = dynamic(() => import("react-quill-new"), {
   ssr: false,
 });
@@ -62,8 +65,24 @@ const blogPostSchema = z.object({
   coverImage: z.string().min(1, "Image is required"),
 });
 
+// isSuspiciousContent
+const isSuspiciousContent = (data) => {
+  const suspiciousPatters = [
+    /<scrip>/i,
+    /javaScript:/i,
+    /onload=/i,
+    /onclick=/i,
+    /'.*OR.*'/i,
+    /UNION SELECT/i,
+  ];
+  return suspiciousPatters.some((pattern) => pattern.test(data.content));
+};
+
+// WriteBlogForm component
 export default function WriteBlogForm({ user }) {
+  const [isLoading, setIsLoading] = useState(false);
   const quillRef = useRef(null);
+  const router = useRouter();
 
   const {
     control,
@@ -80,24 +99,73 @@ export default function WriteBlogForm({ user }) {
       coverImage: "",
     },
   });
-  console.log(user);
+  const title = watch("title");
+  const content = watch("content");
+  const category = watch("category");
+  const coverImage = watch("coverImage");
+
+  const onBlogSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      const isSuspiciousInput = isSuspiciousContent(data);
+      const result = await fetch("/api/create-blog-post", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          "x-arcjet-suspicious": isSuspiciousInput.toString(),
+        },
+        body: JSON.stringify(data),
+      }).then((res) => res.json());
+
+      if (result.success) {
+        toast.success("Success", {
+          description: result.success,
+        });
+        router.push("/");
+      }
+    } catch (error) {
+      toast.error("Error", {
+        description: "Some error occurred",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const isBtnDisabled = () => {
+    return !title || !content || !category || !coverImage;
+  };
+
+  const isUploadingImage = !coverImage;
+
   return (
     <>
       <main className="mt-10 px-10 md:px-24">
         <div>
           <form>
-            <Controller
-              name="title"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="text"
-                  placeholder="Title"
-                  className="mb-8 border-0! py-5 pl-0! text-4xl! font-bold shadow-none placeholder:text-gray-500 focus-visible:ring-0!"
-                />
-              )}
-            />
+            <div className="flex justify-between gap-2">
+              <Controller
+                name="title"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="text"
+                    placeholder="Title"
+                    className="mb-8 border-0! py-5 pl-0! text-4xl! font-bold shadow-none placeholder:text-gray-500 focus-visible:ring-0!"
+                  />
+                )}
+              />
+              <button
+                disabled={isBtnDisabled() || isUploadingImage}
+                onClick={handleSubmit(onBlogSubmit)}
+                className="h-8 cursor-pointer rounded-3xl bg-indigo-500 px-4 py-1.5 text-sm text-white transition-all duration-200 hover:bg-indigo-600"
+                type="button"
+              >
+                {isLoading ? "Publishing..." : " Publish"}
+              </button>
+            </div>
+
             {errors.title && (
               <p className="text-sm text-red-600">{errors.title.message}</p>
             )}
@@ -123,8 +191,11 @@ export default function WriteBlogForm({ user }) {
               )}
             />
 
-            <UploadFile />
-            <div className="mt-5 min-h-40 border-t py-2 ">
+            <UploadFile
+              onUploadComplete={(url) => setValue("coverImage", url)}
+            />
+
+            <div className="mt-5 min-h-40 border-t py-2">
               <Controller
                 name="content"
                 control={control}
