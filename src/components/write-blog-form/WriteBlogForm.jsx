@@ -105,6 +105,13 @@ export default function WriteBlogForm({ user }) {
   const coverImage = watch("coverImage");
 
   const onBlogSubmit = async (data) => {
+    const cleanContent = data.content.replace(/<p><br><\/p>/g, "").trim();
+
+    if (!cleanContent) {
+      toast.error("Content is required");
+      return;
+    }
+
     setIsLoading(true);
     try {
       const isSuspiciousInput = isSuspiciousContent(data);
@@ -137,12 +144,12 @@ export default function WriteBlogForm({ user }) {
   };
 
   const isUploadingImage = !coverImage;
-
+  console.log("BLOG DATA:", data);
   return (
     <>
       <main className="mt-10 px-10 md:px-24">
         <div>
-          <form>
+          <form onSubmit={handleSubmit(onBlogSubmit)}>
             <div className="flex justify-between gap-2">
               <Controller
                 name="title"
@@ -157,12 +164,11 @@ export default function WriteBlogForm({ user }) {
                 )}
               />
               <button
-                disabled={isBtnDisabled() || isUploadingImage}
-                onClick={handleSubmit(onBlogSubmit)}
-                className="h-8 cursor-pointer rounded-3xl bg-indigo-500 px-4 py-1.5 text-sm text-white transition-all duration-200 hover:bg-indigo-600"
-                type="button"
+                disabled={isBtnDisabled() || isUploadingImage || isLoading}
+                type="submit"
+                className="h-8 rounded-3xl bg-indigo-500 px-4 py-1.5 text-sm text-white hover:bg-indigo-600"
               >
-                {isLoading ? "Publishing..." : " Publish"}
+                {isLoading ? "Publishing..." : "Publish"}
               </button>
             </div>
 
