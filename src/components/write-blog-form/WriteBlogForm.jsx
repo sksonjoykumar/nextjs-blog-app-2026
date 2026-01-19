@@ -123,6 +123,7 @@ export default function WriteBlogForm({ user }) {
         },
         body: JSON.stringify(data),
       }).then((res) => res.json());
+      console.log(data);
 
       if (result.success) {
         toast.success("Success", {
@@ -144,7 +145,7 @@ export default function WriteBlogForm({ user }) {
   };
 
   const isUploadingImage = !coverImage;
-  console.log("BLOG DATA:", data);
+
   return (
     <>
       <main className="mt-10 px-10 md:px-24">
@@ -166,7 +167,7 @@ export default function WriteBlogForm({ user }) {
               <button
                 disabled={isBtnDisabled() || isUploadingImage || isLoading}
                 type="submit"
-                className="h-8 rounded-3xl bg-indigo-500 px-4 py-1.5 text-sm text-white hover:bg-indigo-600"
+                className="h-8 cursor-pointer rounded-3xl bg-indigo-500 px-4 py-1.5 text-sm text-white hover:bg-indigo-600"
               >
                 {isLoading ? "Publishing..." : "Publish"}
               </button>
