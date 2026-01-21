@@ -1,11 +1,14 @@
-export default function Home() {
+import { getBlogPostsAction } from "../actions/blog";
+import HomePage from "../components/home/HomePage";
+
+export default async function Home() {
+  const posts = await getBlogPostsAction();
+
   return (
-    <div className="">
+    <>
       <main>
-        <h1 className="text-logoColor mt-4 text-center text-4xl font-semibold">
-          Home
-        </h1>
+        <HomePage posts={posts} />
       </main>
-    </div>
+    </>
   );
 }
