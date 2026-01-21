@@ -2,6 +2,7 @@ import arcjet, {
   detectBot,
   protectSignup,
   slidingWindow,
+  tokenBucket,
   validateEmail,
 } from "@arcjet/next";
 
@@ -60,6 +61,12 @@ export const blogPostRules = arcjet({
     // shield({
     //   mode: isProd ? "LIVE" : "DRY_RUN",
     // }),
+    // tokenBucket({
+    //   mode:'LIVE',
+    //   refillRate:20,
+    //   interval:'1m',
+    //   capacity:2
+    // })
   ],
 });
 

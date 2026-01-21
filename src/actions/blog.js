@@ -1,4 +1,6 @@
+import { request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { z } from "zod";
 import { blogPostRules } from "../lib/arcjet";
 import { verifyAuth } from "../lib/auth";
@@ -13,6 +15,7 @@ const blogPostSchema = z.object({
   coverImage: z.string().min(1, "Image is required"),
 });
 
+// createBlogPostAction function
 export async function createBlogPostAction(data, meta) {
   const user = await verifyAuth(meta.token);
 
@@ -72,6 +75,70 @@ export async function createBlogPostAction(data, meta) {
     console.error("BLOG CREATE ERROR:", error);
     return {
       error: "Database error",
+    };
+  }
+}
+
+// getBlogPostsAction
+export async function getBlogPostsAction() {
+  const token = await cookies.get("token")?.value;
+  const user = await verifyAuth(token);
+
+  if (!user) {
+    return {
+      error: "Unauthorized user",
+      status: 401,
+    };
+  }
+
+  try {
+    const req = await request();
+    const decision = await blogPostRules.protect(req, { requested: 10 });
+    if (decision.isDenied()) {
+      if (decision.reason.isRateLimit()) {
+        return {
+          error: "Rate limit excedeed! Please try after some time",
+          statu: 429,
+        };
+      }
+
+      if (decision.reason.isBot()) {
+        return {
+          error: "Bot activity detected",
+        };
+      }
+      return {
+        error: "Request denied",
+        status: 403,
+      };
+    }
+
+    console.log(decision, "decision123");
+
+    await connectToDatabase();
+
+    const posts = await BlogPost.find({})
+      .sort({ createdAt: -1 })
+      .populate("author", "name");
+    const serializedPosts = posts.map((post) => ({
+      _id: post._id.toString(),
+      title: post.title,
+      coverImage: post.coverImage,
+      author: {
+        _id: post.author._id.toString(),
+        name: post.author.name,
+      },
+      category: post.category,
+      createdAt: post.createdAt.toISOString(),
+    }));
+
+    return {
+      success: true,
+      posts: serializedPosts,
+    };
+  } catch (error) {
+    return {
+      error: "Failed to fetch the blogs! Please try again",
     };
   }
 }
