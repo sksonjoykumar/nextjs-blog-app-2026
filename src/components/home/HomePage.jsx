@@ -134,7 +134,7 @@ export default function HomePage({ posts }) {
                             {post.author?.name}
                           </span>
                           <Link
-                            href="/"
+                            href={`/blog/${post._id}`}
                             className="border-b-2 border-indigo-600 text-sm text-indigo-600 hover:opacity-80"
                           >
                             Read More
@@ -178,7 +178,7 @@ export default function HomePage({ posts }) {
                             {post.author?.name}
                           </span>
                           <Link
-                            href="/"
+                            href={`/blog/${post._id}`}
                             className="border-b-2 border-indigo-600 text-sm text-indigo-600 hover:opacity-80"
                           >
                             Read More
