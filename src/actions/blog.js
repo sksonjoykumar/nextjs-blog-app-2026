@@ -78,70 +78,7 @@ export async function createBlogPostAction(data, meta) {
   }
 }
 
-// getBlogPostsAction
-// export async function getBlogPostsAction() {
-//   const token = (await cookies()).get("token")?.value;
-//   const user = await verifyAuth(token);
-
-//   if (!user) {
-//     return {
-//       error: "Unauthorized user",
-//       status: 401,
-//     };
-//   }
-
-//   try {
-//     const req = await request();
-//     const decision = await blogPostRules.protect(req, { requested: 10 });
-//     if (decision.isDenied()) {
-//       if (decision.reason.isRateLimit()) {
-//         return {
-//           error: "Rate limit exceeded! Please try after some time",
-//           status: 429,
-//         };
-//       }
-
-//       if (decision.reason.isBot()) {
-//         return {
-//           error: "Bot activity detected",
-//         };
-//       }
-//       return {
-//         error: "Request denied",
-//         status: 403,
-//       };
-//     }
-
-//     console.log(decision, "decision123");
-
-//     await connectToDatabase();
-
-//     const posts = await BlogPost.find({})
-//       .sort({ createdAt: -1 })
-//       .populate("author", "name");
-//     const serializedPosts = posts.map((post) => ({
-//       _id: post._id.toString(),
-//       title: post.title,
-//       coverImage: post.coverImage,
-//       author: {
-//         _id: post.author._id.toString(),
-//         name: post.author.name,
-//       },
-//       category: post.category,
-//       createdAt: post.createdAt.toISOString(),
-//     }));
-
-//     return {
-//       success: true,
-//       posts: serializedPosts,
-//     };
-//   } catch (error) {
-//     return {
-//       error: "Failed to fetch the blogs! Please try again",
-//     };
-//   }
-// }
-
+// getBlogPostsAction function
 export async function getBlogPostsAction() {
   const token = (await cookies()).get("token")?.value;
   const user = await verifyAuth(token);
@@ -153,7 +90,7 @@ export async function getBlogPostsAction() {
   try {
     const req = { headers: headers() };
 
-    const decision = await blogPostRules.protect(req, { requested: 10 });
+    const decision = await blogPostRules.protect(req, { requested: 50 });
     if (decision.isDenied()) {
       if (decision.reason.isRateLimit()) {
         return { error: "Rate limit exceeded", status: 429 };
@@ -172,13 +109,15 @@ export async function getBlogPostsAction() {
         path: "author",
         select: "name",
         options: { strictPopulate: false },
-      });
+      })
+      .lean();
 
     const serializedPosts = posts.map((post) => ({
       _id: post._id.toString(),
       title: post.title,
       coverImage: post.coverImage,
-      author: post.author
+      author: post.author,
+      content: post.content
         ? {
             _id: post.author._id.toString(),
             name: post.author.name,
