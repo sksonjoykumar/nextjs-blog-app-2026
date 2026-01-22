@@ -116,13 +116,13 @@ export async function getBlogPostsAction() {
       _id: post._id.toString(),
       title: post.title,
       coverImage: post.coverImage,
-      author: post.author,
-      content: post.content
+      author: post.author
         ? {
             _id: post.author._id.toString(),
             name: post.author.name,
           }
         : null,
+      content: post.content,
       category: post.category,
       createdAt: post.createdAt.toISOString(),
     }));
