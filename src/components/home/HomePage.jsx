@@ -86,12 +86,14 @@ export default function HomePage({ posts }) {
       </div>
 
       {/* Posts */}
-      <div className="flex flex-col lg:flex-row lg:gap-6 xl:gap-20">
+      <div className="flex flex-col gap-3 md:gap-6 lg:flex-row">
         {/* POSTS */}
         <div className="order-2 w-full lg:order-1">
           <div
-            className={`mt-8 gap-6 ${
-              isGridView ? "grid sm:grid-cols-2" : "flex flex-col"
+            className={`mt-8 gap-3 lg:gap-6 ${
+              isGridView
+                ? "grid sm:grid-cols-2 md:grid-cols-3"
+                : "flex flex-col"
             }`}
           >
             {filteredPosts.length > 0 ? (
@@ -108,7 +110,7 @@ export default function HomePage({ posts }) {
                         alt="blog image"
                         width={500}
                         height={300}
-                        className="h-40 w-full rounded-md object-cover lg:h-52"
+                        className="w-full rounded-md object-cover transition-all duration-300 hover:scale-95 sm:h-32 lg:h-40"
                       />
 
                       <div className="mt-4">
@@ -150,7 +152,7 @@ export default function HomePage({ posts }) {
                         alt="blog image"
                         width={1200}
                         height={400}
-                        className="h-44 w-full rounded-md object-cover sm:w-72 md:h-60 md:w-60 md:w-96"
+                        className="h-44 w-full rounded-md object-cover transition-all duration-300 hover:scale-95 sm:w-72 md:h-60 md:w-60 md:w-96"
                       />
 
                       <div className="flex min-w-0 flex-1 flex-col justify-between">
@@ -198,20 +200,24 @@ export default function HomePage({ posts }) {
         </div>
 
         {/* CATEGORIES */}
-        <div className="order-1 mt-6 flex h-10 flex-wrap justify-center gap-3 md:justify-end lg:order-2 lg:mt-10 lg:justify-start">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`rounded-full border px-4 py-1 text-sm capitalize transition ${
-                selectedCategory === cat || (!selectedCategory && cat === "All")
-                  ? "border-indigo-600 bg-indigo-600 text-white"
-                  : "border-gray-300 bg-gray-100 hover:bg-gray-200"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        <div className="order-1 mt-5 mb-5 sm:mt-0 lg:order-2 lg:justify-start">
+          <h2 className="text-center text-3xl font-semibold mt-3">Categories</h2>
+          <div className="mt-5 flex h-10 flex-wrap justify-center gap-3">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`rounded-full border px-4 py-1 text-sm capitalize transition ${
+                  selectedCategory === cat ||
+                  (!selectedCategory && cat === "All")
+                    ? "border-indigo-600 bg-indigo-600 text-white"
+                    : "border-gray-300 bg-gray-100 hover:bg-gray-200"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -12,4 +12,6 @@ export const blogCategory = [
   { key: "blockchain", value: "Blockchain" },
   { key: "digitalMarketing", value: "Digital Marketing" },
   { key: "videoEditing", value: "Video Editing" },
+  { key: "fashion", value: "Fashion" },
+  { key: "socialMedia", value: "Social Media" },
 ];
