@@ -1,6 +1,7 @@
 import { verifyAuth } from "@/src/lib/auth";
 import { cookies } from "next/headers";
 import Header from "../header/Header";
+import Footer from "../footer/Footer";
 
 export default async function CommonLayout({ children }) {
   const token = (await cookies()).get("token")?.value;
@@ -10,6 +11,7 @@ export default async function CommonLayout({ children }) {
       <div className="mx-auto min-h-screen max-w-350 scroll-smooth">
         {user && <Header />}
         {children}
+        <Footer />
       </div>
     </>
   );
