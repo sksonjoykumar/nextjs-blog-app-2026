@@ -5,8 +5,7 @@ export default function BlogPage() {
   return (
     <>
      <BlogDetails/>
-     <BlogDetails/>
-     <BlogDetails/>
+  
     </>
   );
 }
