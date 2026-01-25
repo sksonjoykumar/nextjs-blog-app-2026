@@ -6,6 +6,7 @@ export default function BlogPage() {
     <>
      <BlogDetails/>
      <BlogDetails/>
+     <BlogDetails/>
     </>
   );
 }
