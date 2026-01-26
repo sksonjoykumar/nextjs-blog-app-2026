@@ -6,7 +6,7 @@ export default function Categories({ categories, selectedCategory, setSelectedCa
     <>
       <div className="order-1 mt-5 mb-5 sm:mt-0 lg:order-2 lg:justify-start">
         <h2 className="mt-3 text-center text-3xl font-semibold">Categories</h2>
-        <div className="mt-5 flex h-10 flex-wrap justify-center gap-3">
+        <div className="mt-5 flex h-10 flex-wrap justify-center gap-2">
           {categories.map((cat) => (
             <button
               key={cat}
