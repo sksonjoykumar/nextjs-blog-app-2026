@@ -6,7 +6,7 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <>
-      <footer className="mt-12 border-t bg-indigo-50 pb-12">
+      <footer className="border-t bg-indigo-50 pb-12">
         <div className="mx-auto max-w-350 px-10 md:px-24">
           <div className="mt-10 grid grid-cols-2 gap-10 md:grid-cols-2 lg:grid-cols-4">
             <div className="">
@@ -52,20 +52,20 @@ const Footer = () => {
 
               <ul className="mt-4 text-gray-700 dark:text-gray-300">
                 <li className="cursor-pointer pb-1 text-sm transition-all duration-200 hover:text-indigo-500">
-                  <Link href="/programming">Programming</Link>
+                  <Link href="/">Programming</Link>
                 </li>
                 <li className="cursor-pointer pb-1 text-sm transition-all duration-200 hover:text-indigo-500">
-                  <Link href="/technology">Technology</Link>
+                  <Link href="/">Technology</Link>
                 </li>
                 <li className="cursor-pointer pb-1 text-sm transition-all duration-200 hover:text-indigo-500">
-                  <Link href="/computer">Computer</Link>
+                  <Link href="/">Computer</Link>
                 </li>
                 <li className="cursor-pointer pb-1 text-sm transition-all duration-200 hover:text-indigo-500">
-                  <Link href="/fashion">Fashion</Link>
+                  <Link href="/">Fashion</Link>
                 </li>
 
                 <li className="cursor-pointer text-sm transition-all duration-200 hover:text-indigo-500">
-                  <Link href="/nature">Nature</Link>
+                  <Link href="/">Nature</Link>
                 </li>
               </ul>
             </div>

@@ -53,7 +53,7 @@ export default function HomePage({ posts }) {
   console.log(filteredPosts);
 
   return (
-    <section className="mt-6 px-6 md:px-24">
+    <section className="mt-6 mb-12 px-6 md:px-24">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-4xl font-semibold">All Blogs</h2>

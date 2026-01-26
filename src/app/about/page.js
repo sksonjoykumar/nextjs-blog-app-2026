@@ -63,7 +63,7 @@ export default function About() {
           </div>
         </div>
 
-        <div className="bg-indigo-50">
+        <div >
           <div className="mx-auto max-w-350 px-10 md:px-24">
             <div className="flex flex-col items-center justify-between gap-8 py-10 md:flex-row lg:gap-14">
               <div className="">
@@ -90,33 +90,36 @@ export default function About() {
             </div>
           </div>
         </div>
-        <div className="mx-auto max-w-350 px-10 md:px-24">
-          <div className="flex flex-col items-center justify-between gap-8 py-10 md:flex-row lg:gap-14">
-            <Image
-              src={Img4}
-              className="w-full rounded-4xl object-cover shadow-sm md:w-1/2"
-              placeholder="blur"
-              alt="About-img"
-            />
-            <div className="">
-              <h1 className="text-3xl font-semibold text-gray-700">
-                Our Mission
-              </h1>
-              <p className="mt-4 text-sm text-gray-600">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Inventore libero quod id sint, voluptatem laboriosam distinctio
-                labore velit! At aliquam magnam dolor dolorum voluptatibus
-                consequuntur optio nostrum ab voluptatem neque. Lorem ipsum,
-                dolor sit amet consectetur adipisicing elit. Inventore libero
-                quod id sint, voluptatem laboriosam distinctio labore velit! At
-                aliquam magnam dolor dolorum voluptatibus consequuntur optio
-                nostrum ab voluptatem neque.
-              </p>
+        <div className="bg-indigo-50">
+          <div className="mx-auto max-w-350 px-10 md:px-24">
+            <div className="flex flex-col items-center justify-between gap-8 py-10 md:flex-row lg:gap-14">
+              <Image
+                src={Img4}
+                className="w-full rounded-4xl object-cover shadow-sm md:w-1/2"
+                placeholder="blur"
+                alt="About-img"
+              />
+              <div className="">
+                <h1 className="text-3xl font-semibold text-gray-700">
+                  Our Mission
+                </h1>
+                <p className="mt-4 text-sm text-gray-600">
+                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                  Inventore libero quod id sint, voluptatem laboriosam
+                  distinctio labore velit! At aliquam magnam dolor dolorum
+                  voluptatibus consequuntur optio nostrum ab voluptatem neque.
+                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                  Inventore libero quod id sint, voluptatem laboriosam
+                  distinctio labore velit! At aliquam magnam dolor dolorum
+                  voluptatibus consequuntur optio nostrum ab voluptatem neque.
+                </p>
+              </div>
             </div>
           </div>
         </div>
+       
 
-        <div className="mx-auto max-w-350 px-10 md:px-24">
+        <div className="mx-auto max-w-350 px-10 md:px-24 mt-10 mb-12">
           <div className="sm:max-w-1/2">
             <h1 className="text-2xl font-semibold text-indigo-400">
               🌱 Simple & Friendly
@@ -158,7 +161,7 @@ export default function About() {
             </p>
           </div>
           <div className="mt-10">
-            <div className="flex justify-end ">
+            <div className="flex justify-end">
               <div className="sm:w-1/2">
                 <h1 className="text-2xl font-semibold text-indigo-400">
                   🌍 Community-Focused

@@ -148,10 +148,10 @@ export default function WriteBlogForm({ user }) {
 
   return (
     <>
-      <main className="mt-10 px-10 md:px-24">
+      <main className="mx-auto mt-10 mb-12 max-w-350 px-10 md:px-24">
         <div>
           <form onSubmit={handleSubmit(onBlogSubmit)}>
-            <div className="flex justify-between gap-2 sticky top-0 ">
+            <div className="sticky top-0 flex justify-between gap-2">
               <Controller
                 name="title"
                 control={control}
@@ -202,7 +202,7 @@ export default function WriteBlogForm({ user }) {
               onUploadComplete={(url) => setValue("coverImage", url)}
             />
 
-            <div className="mt-5 min-h-40 border-t py-2 border rounded-sm">
+            <div className="mt-5 min-h-40 rounded-sm border border-t py-2">
               <Controller
                 name="content"
                 control={control}
