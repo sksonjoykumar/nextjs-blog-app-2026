@@ -5,6 +5,7 @@ import { LayoutGrid, LayoutList } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import Categories from "../categories/Categories";
 
 export default function HomePage({ posts }) {
   const [isGridView, setIsGridView] = useState(true);
@@ -200,25 +201,11 @@ export default function HomePage({ posts }) {
         </div>
 
         {/* CATEGORIES */}
-        <div className="order-1 mt-5 mb-5 sm:mt-0 lg:order-2 lg:justify-start">
-          <h2 className="text-center text-3xl font-semibold mt-3">Categories</h2>
-          <div className="mt-5 flex h-10 flex-wrap justify-center gap-3">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`rounded-full border px-4 py-1 text-sm capitalize transition ${
-                  selectedCategory === cat ||
-                  (!selectedCategory && cat === "All")
-                    ? "border-indigo-600 bg-indigo-600 text-white"
-                    : "border-gray-300 bg-gray-100 hover:bg-gray-200"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
+        <Categories
+          categories={categories}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
       </div>
     </section>
   );

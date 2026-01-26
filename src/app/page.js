@@ -7,7 +7,7 @@ export default async function Home() {
 
   return (
     <>
-      <main>
+      <main className="mx-auto min-h-screen max-w-350 scroll-smooth">
         <HomePage posts={posts} />
       </main>
     </>
