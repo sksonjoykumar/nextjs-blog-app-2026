@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import Categories from "../categories/Categories";
+import BlogPagination from "../pagination/BlogPagination";
 
 export default function HomePage({ posts }) {
   const [isGridView, setIsGridView] = useState(true);
@@ -207,6 +208,8 @@ export default function HomePage({ posts }) {
           setSelectedCategory={setSelectedCategory}
         />
       </div>
+      {/* Pagination */}
+      <BlogPagination />
     </section>
   );
 }
