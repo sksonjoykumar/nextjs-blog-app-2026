@@ -1,11 +1,16 @@
-'use client'
-import React from 'react'
+"use client";
 
-export default function Categories({ categories, selectedCategory, setSelectedCategory }) {
+export default function Categories({
+  categories,
+  selectedCategory,
+  setSelectedCategory,
+}) {
   return (
     <>
-      <div className="order-1 mt-5 mb-5 sm:mt-0 lg:order-2 lg:justify-start">
-        <h2 className="mt-3 text-center text-3xl font-semibold">Categories</h2>
+      <div className="mx-auto mt-5 mb-10 sm:mt-0 sm:mb-0 sm:max-w-sm lg:min-h-72">
+        <h2 className="mt-3 text-center text-3xl font-semibold text-gray-800">
+          Categories
+        </h2>
         <div className="mt-5 flex h-10 flex-wrap justify-center gap-2">
           {categories.map((cat) => (
             <button

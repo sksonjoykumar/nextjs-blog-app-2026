@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import Image from "next/image";
@@ -49,8 +48,13 @@ export default function HomePage({ posts }) {
   }
 
   // previewText
-  const previewText = (html, length = 200) =>
+  const previewText = (html, length = 50) =>
     htmlToText(html).slice(0, length) + "...";
+
+  // latestBlog
+  const latestBlogs = [...safePosts]
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 3);
 
   console.log(filteredPosts);
 
@@ -87,11 +91,11 @@ export default function HomePage({ posts }) {
           </Button>
         </div>
       </div>
-
       {/* Posts */}
+      {/*  */}
       <div className="flex flex-col gap-3 md:gap-6 lg:flex-row">
         {/* POSTS */}
-        <div className="order-2 w-full lg:order-1">
+        <div className="order-1 w-full lg:order-1">
           <div
             className={`mt-8 gap-3 lg:gap-6 ${
               isGridView
@@ -122,7 +126,7 @@ export default function HomePage({ posts }) {
                             {new Date(post.createdAt).toLocaleDateString()}
                           </span>
                           <span className="font-medium text-indigo-500 capitalize">
-                            {post.category}
+                            {post.category.slice(0, 15)} ...
                           </span>
                         </div>
 
@@ -165,7 +169,7 @@ export default function HomePage({ posts }) {
                               {new Date(post.createdAt).toLocaleDateString()}
                             </span>
                             <span className="font-medium text-indigo-500 capitalize">
-                              {post.category}
+                              {post.category.slice(0, 30)}
                             </span>
                           </div>
 
@@ -203,18 +207,18 @@ export default function HomePage({ posts }) {
         </div>
 
         {/* CATEGORIES */}
-        <>
+        <div className="order-2 lg:order-2">
           <Categories
             categories={categories}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
           />
           {/* LatestBlog */}
-          {/* <LatestBlog /> */}
-        </>
+          <LatestBlog latestBlogs={latestBlogs} previewText={previewText} />
+        </div>
       </div>
       {/* Pagination */}
-      <BlogPagination />
+      <BlogPagination safePosts={safePosts} />
     </section>
   );
 }

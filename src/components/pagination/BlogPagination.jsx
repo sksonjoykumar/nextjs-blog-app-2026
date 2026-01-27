@@ -1,4 +1,4 @@
-
+"use client";
 import {
   Pagination,
   PaginationContent,
@@ -8,15 +8,34 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function BlogPagination() {
+// postPerPage
+const postPerPage = 6;
+
+export default function BlogPagination({ safePosts }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const page = Number(searchParams.get("page")) || 1;
+
+  const startIndex = (page - 1) * postPerPage;
+  const currentBlog = safePosts.slice(startIndex, startIndex + postPerPage);
+
+  const handlePageChange = (page) => {
+    router.push(`/blog?page=${page}`);
+  };
+  console.log(safePosts);
   return (
     <>
       <div className="mt-10">
-        <Pagination>
+        <Pagination className="">
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious
+                href="#"
+                onClick={() => handlePageChange(index - 1)}
+              />
             </PaginationItem>
             <PaginationItem>
               <PaginationLink href="#">1</PaginationLink>
@@ -27,19 +46,28 @@ export default function BlogPagination() {
               </PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
+              <PaginationLink className="hidden sm:flex" href="#">
+                3
+              </PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">4</PaginationLink>
+              <PaginationLink className="hidden sm:flex" href="#">
+                4
+              </PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">5</PaginationLink>
+              <PaginationLink className="hidden sm:flex" href="#">
+                5
+              </PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationEllipsis />
+              <PaginationEllipsis className="hidden sm:flex" />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext
+                href="#"
+                onClick={() => handlePageChange(index + 1)}
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>

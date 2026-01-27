@@ -188,7 +188,7 @@ export default function WriteBlogForm({ user }) {
                     {blogCategory.map((categoryItem) => (
                       <SelectItem
                         key={categoryItem.key}
-                        value={categoryItem.key}
+                        value={categoryItem.value}
                       >
                         {categoryItem.value}
                       </SelectItem>
