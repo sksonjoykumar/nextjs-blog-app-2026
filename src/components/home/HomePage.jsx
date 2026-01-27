@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import Categories from "../categories/Categories";
+import LatestBlog from "../latest-blog/LatestBlog";
 import BlogPagination from "../pagination/BlogPagination";
 
 export default function HomePage({ posts }) {
@@ -202,11 +203,15 @@ export default function HomePage({ posts }) {
         </div>
 
         {/* CATEGORIES */}
-        <Categories
-          categories={categories}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-        />
+        <>
+          <Categories
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+          {/* LatestBlog */}
+          {/* <LatestBlog /> */}
+        </>
       </div>
       {/* Pagination */}
       <BlogPagination />

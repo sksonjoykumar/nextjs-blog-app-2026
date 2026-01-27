@@ -84,7 +84,7 @@ export default function ContactPage() {
                 />
                 <Button
                   type="submit"
-                  className="w-full bg-indigo-500 text-white hover:bg-[#6a67fc]"
+                  className="w-full bg-indigo-500 text-white hover:bg-[#6a67fc] cursor-pointer"
                 >
                   Send
                 </Button>
