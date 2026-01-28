@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import Categories from "../categories/Categories";
 import LatestBlog from "../latest-blog/LatestBlog";
 import BlogPagination from "../pagination/BlogPagination";
+import { useSearchParams } from "next/navigation";
 
 export default function HomePage({ posts }) {
   const [isGridView, setIsGridView] = useState(true);
@@ -36,6 +37,17 @@ export default function HomePage({ posts }) {
       (post) => post.category?.toLowerCase() === selectedCategory.toLowerCase(),
     );
   }, [safePosts, selectedCategory]);
+
+  // Pagination
+  const POSTS_PER_PAGE = 6;
+
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+
+  const paginatedPosts = useMemo(() => {
+    const start = (page - 1) * POSTS_PER_PAGE;
+    return filteredPosts.slice(start, start + POSTS_PER_PAGE);
+  }, [filteredPosts, page]);
 
   function htmlToText(html = "") {
     return html
@@ -103,8 +115,8 @@ export default function HomePage({ posts }) {
                 : "flex flex-col"
             }`}
           >
-            {filteredPosts.length > 0 ? (
-              filteredPosts.map((post) => (
+            {paginatedPosts.length > 0 ? (
+              paginatedPosts.map((post) => (
                 <div
                   key={post._id}
                   className="rounded-xl border bg-white p-4 shadow-sm transition hover:shadow-md"
@@ -218,7 +230,7 @@ export default function HomePage({ posts }) {
         </div>
       </div>
       {/* Pagination */}
-      <BlogPagination safePosts={safePosts} />
+      <BlogPagination posts={filteredPosts} />
     </section>
   );
 }

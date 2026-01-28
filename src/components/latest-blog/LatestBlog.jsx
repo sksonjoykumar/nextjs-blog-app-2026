@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function LatestBlog({ latestBlogs, previewText }) {
   return (
     <>
-      <div className="mx-auto  mb-5 flex min-h-72 flex-col justify-center px-3 sm:max-w-sm lg:mt-0">
+      <div className="mx-auto mt-10 mb-5 flex min-h-72 flex-col justify-center px-3 sm:max-w-sm lg:mt-0">
         <h2 className="mt-3 text-center text-3xl font-semibold text-gray-800">
           Latest Blogs
         </h2>

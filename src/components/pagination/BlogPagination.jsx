@@ -2,76 +2,63 @@
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-// postPerPage
-const postPerPage = 6;
+const POSTS_PER_PAGE = 6;
 
-export default function BlogPagination({ safePosts }) {
-  const searchParams = useSearchParams();
+export default function BlogPagination({ posts }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const page = Number(searchParams.get("page")) || 1;
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
 
-  const startIndex = (page - 1) * postPerPage;
-  const currentBlog = safePosts.slice(startIndex, startIndex + postPerPage);
-
-  const handlePageChange = (page) => {
-    router.push(`/blog?page=${page}`);
+  const goToPage = (p) => {
+    if (p < 1 || p > totalPages) return;
+    router.push(`${pathname}?page=${p}`);
   };
-  console.log(safePosts);
+
+  if (totalPages <= 1) return null;
+
   return (
-    <>
-      <div className="mt-10">
-        <Pagination className="">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={() => handlePageChange(index - 1)}
-              />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#" isActive>
-                2
+    <Pagination className="mt-10">
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            onClick={() => goToPage(page - 1)}
+            className={page === 1 ? "pointer-events-none opacity-50" : ""}
+          />
+        </PaginationItem>
+
+        {[...Array(totalPages)].map((_, i) => {
+          const pageNumber = i + 1;
+          return (
+            <PaginationItem key={pageNumber}>
+              <PaginationLink
+                isActive={page === pageNumber}
+                onClick={() => goToPage(pageNumber)}
+              >
+                {pageNumber}
               </PaginationLink>
             </PaginationItem>
-            <PaginationItem>
-              <PaginationLink className="hidden sm:flex" href="#">
-                3
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink className="hidden sm:flex" href="#">
-                4
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink className="hidden sm:flex" href="#">
-                5
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis className="hidden sm:flex" />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={() => handlePageChange(index + 1)}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
-    </>
+          );
+        })}
+
+        <PaginationItem>
+          <PaginationNext
+            onClick={() => goToPage(page + 1)}
+            className={
+              page === totalPages ? "pointer-events-none opacity-50" : ""
+            }
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
   );
 }
