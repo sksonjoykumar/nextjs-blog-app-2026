@@ -86,7 +86,7 @@ const Footer = () => {
                   <Search className="absolute top-2 left-1.5 h-5 w-5 text-gray-600" />
                   <Input
                     type="search"
-                    className="border border-gray-300 py-4.5 pl-8 text-balance text-gray-900 shadow-none focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
+                    className="border border-gray-300 py-4.5 pl-8 text-balance text-gray-900 shadow-none focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none bg-white"
                     placeholder="Sign up..."
                   />
                 </div>
