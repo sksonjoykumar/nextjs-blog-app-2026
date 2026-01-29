@@ -1,45 +1,90 @@
 "use client";
-import { MessageCircleMore, User } from "lucide-react";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Clock, MessageCircleMore } from "lucide-react";
+import Image from "next/image";
 
 export default function BlogDetails({ post }) {
-  console.log(post?.title);
+  console.log(post);
+
+  function htmlToText(html = "") {
+    return html
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
   return (
     <>
       <div className="mx-auto max-w-350 px-4 md:px-24">
-        <div className="m-10 rounded-md border-t border-gray-100 p-5 shadow-sm">
-          <h1 className="text-3xl font-semibold text-gray-700">
+        <div className="mb my-10 rounded-md border-t border-gray-100 p-5 shadow-sm">
+          <h1 className="text-center text-4xl font-semibold text-gray-700 sm:text-left">
             {post?.title}
           </h1>
-          <span>|</span>
-          <div className="flex gap-2">
-            <div className="flex gap-2">
-              <User /> <span className="text-gray-600">By</span>
-              <p className="font-semibold text-gray-700">
-                {post?.author?.name}
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-5 sm:justify-start">
+            <div className="flex items-center gap-2">
+              <Avatar className="h-7 w-7 cursor-pointer rounded-full text-gray-600">
+                <AvatarImage
+                  src="https://img.icons8.com/?size=160&id=fUUEbUbXhzOA&format=png"
+                  alt="user-icon"
+                />
+              </Avatar>
+              <div className="flex items-center gap-1">
+                <p className="text-balance text-gray-600">By</p>
+                <p className="font-bold text-gray-600">{post?.author?.name}</p>
+              </div>
+            </div>
+            <span className="h-4 border border-r text-black"></span>
+            <div className="flex items-center gap-1">
+              <span className="inline-block text-gray-600">
+                <Clock width={16} />
+              </span>
+              <p className="text-sm text-gray-700">
+                {new Date(post?.createdAt).toLocaleDateString()}
               </p>
             </div>
-            <p>
-              <span>{new Date(post?.createdAt).toLocaleDateString()}</span>
-            </p>
-            <span>|</span>
-            <div className="flex gap-2">
-              <MessageCircleMore />
-              <p>Comments</p>
+            <span className="h-4 border border-r text-black"></span>
+            <div className="flex gap-1">
+              <span className="inline-block text-gray-600">
+                <MessageCircleMore width={18} />
+              </span>
+              <p className="text-sm text-gray-700">Comments</p>
             </div>
-            {/* <Avatar className="h-10 w-10 cursor-pointer rounded-full">
-              <AvatarImage
-                src="https://img.icons8.com/?size=160&id=fUUEbUbXhzOA&format=png"
-                alt="user-icon"
-              />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar> */}
           </div>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, ipsum
-            accusamus. Cumque, exercitationem animi dignissimos non eius laborum
-            autem totam. At vel deserunt quas, repellendus aut facilis
-            voluptates porro perspiciatis!
+
+          <Image
+            src={post?.coverImage}
+            alt="Blog-Img"
+            width={300}
+            height={400}
+            className="mt-8 max-h-125 w-full rounded-xl border object-cover shadow-sm"
+          />
+          <p className="text-body mt-10 leading-7 text-gray-700">
+            {htmlToText(post?.content)}
           </p>
+        </div>
+        <div className="mt-16 mb-10 rounded-md border-t border-gray-100 p-5 shadow-sm">
+          <div className="w-full md:w-1/2">
+            <h1 className="text-3xl font-semibold text-indigo-300">
+              Write a Comment
+            </h1>
+            <form className="mt-5 w-full">
+              <textarea
+                className="mb-5 h-40 w-full resize-none rounded-md border border-gray-300 bg-slate-50 p-2 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"
+                placeholder="Enter message"
+              />
+              <Button
+                type="submit"
+                className="w-44 py-5 cursor-pointer bg-indigo-500 text-white hover:bg-[#6a67fc]"
+              >
+                Post Comment
+              </Button>
+            </form>
+          </div>
         </div>
       </div>
     </>

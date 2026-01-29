@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
 import { cookies, headers } from "next/headers";
 import { z } from "zod";
@@ -146,16 +147,20 @@ export async function getBlogPostByIdAction(id) {
     };
   }
 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return { error: "Invalid blog ID", status: 400 };
+  }
+
   try {
     await connectToDB();
-    const post = await BlogPost.findById(id).populate("author", "name");
+
+    const post = await BlogPost.findById(id).populate("author", "name").lean();
 
     if (!post) {
-      return {
-        error: "Blog post not found",
-        status: 404,
-      };
+      return { error: "Blog post not found", status: 404 };
     }
+
+    post.createdAt = post.createdAt?.toISOString();
 
     return {
       success: true,
