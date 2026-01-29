@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import Categories from "../categories/Categories";
 import LatestBlog from "../latest-blog/LatestBlog";
 import BlogPagination from "../pagination/BlogPagination";
-import { useSearchParams } from "next/navigation";
 
 export default function HomePage({ posts }) {
   const [isGridView, setIsGridView] = useState(true);
@@ -156,7 +156,7 @@ export default function HomePage({ posts }) {
                           </span>
                           <Link
                             href={`/blog/${post._id}`}
-                            className="border-b-2 border-indigo-600 text-sm text-indigo-600 hover:opacity-80"
+                            className="border-b-2 border-indigo-600 text-xs text-indigo-600 hover:opacity-80"
                           >
                             Read More
                           </Link>
@@ -200,7 +200,7 @@ export default function HomePage({ posts }) {
                           </span>
                           <Link
                             href={`/blog/${post._id}`}
-                            className="border-b-2 border-indigo-600 text-sm text-indigo-600 hover:opacity-80"
+                            className="border-b-2 border-indigo-600 text-xs text-indigo-600 hover:opacity-80"
                           >
                             Read More
                           </Link>
