@@ -133,3 +133,38 @@ export async function getBlogPostsAction() {
     return { error: error.message };
   }
 }
+
+// getBlogPostByIdAction
+export async function getBlogPostByIdAction(id) {
+  const token = (await cookies()).get("token")?.value;
+  const user = await verifyAuth(token);
+
+  if (!user) {
+    return {
+      error: "Unauthorized user",
+      status: 401,
+    };
+  }
+
+  try {
+    await connectToDB();
+    const post = await BlogPost.findById(id).populate("author", "name");
+
+    if (!post) {
+      return {
+        error: "Blog post not found",
+        status: 404,
+      };
+    }
+
+    return {
+      success: true,
+      post,
+    };
+  } catch (error) {
+    console.error("Failed to fetch the blog details! Please try again", error);
+    return {
+      error: error.message,
+    };
+  }
+}

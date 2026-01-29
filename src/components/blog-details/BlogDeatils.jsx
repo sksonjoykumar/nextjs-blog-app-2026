@@ -1,10 +1,11 @@
-export default function BlogDetails() {
+export default function BlogDetails({ post }) {
+ 
+  console.log(post?.title)
   return (
     <>
-    <div className="px-4 md:px-24 max-w-350 mx-auto">
-
-      <h1>Blog Details Page</h1>
-    </div>
+      <div className="mx-auto max-w-350 px-4 md:px-24">
+        <h1>Blog Details Page</h1>
+      </div>
     </>
   );
 }
