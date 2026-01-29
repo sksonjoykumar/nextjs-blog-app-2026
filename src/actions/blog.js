@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import { z } from "zod";
-import { blogPostRules } from "../lib/arcjet";
 import { verifyAuth } from "../lib/auth";
 import connectToDB from "../lib/db";
 import BlogPost from "../models/BlogPost";
@@ -36,23 +35,6 @@ export async function createBlogPostAction(data, meta) {
   const { title, content, coverImage, category } = validateFields.data;
 
   try {
-    const decision = await blogPostRules.protect(
-      {}, // request object not needed here
-      {
-        shield: {
-          params: {
-            title,
-            content,
-            isSuspicious: meta.isSuspicious,
-          },
-        },
-      },
-    );
-
-    if (decision.isDenied()) {
-      return { error: "Request denied" };
-    }
-
     await connectToDB();
 
     const post = await BlogPost.create({
@@ -89,19 +71,6 @@ export async function getBlogPostsAction() {
   }
 
   try {
-    const req = { headers: headers() };
-
-    const decision = await blogPostRules.protect(req, { requested: 50 });
-    if (decision.isDenied()) {
-      if (decision.reason.isRateLimit()) {
-        return { error: "Rate limit exceeded", status: 429 };
-      }
-      if (decision.reason.isBot()) {
-        return { error: "Bot activity detected", status: 403 };
-      }
-      return { error: "Request denied", status: 403 };
-    }
-
     await connectToDB();
 
     const posts = await BlogPost.find({})

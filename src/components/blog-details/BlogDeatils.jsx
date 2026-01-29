@@ -1,22 +1,22 @@
 "use client";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Clock, MessageCircleMore } from "lucide-react";
+import { Clock, Eye, MessageCircleMore } from "lucide-react";
 import Image from "next/image";
 
 export default function BlogDetails({ post }) {
-  console.log(post);
-
+  
   function htmlToText(html = "") {
     return html
-      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
-      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-      .replace(/<[^>]+>/g, "")
-      .replace(/&nbsp;/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
   }
-
+  
+  console.log(post);
   return (
     <>
       <div className="mx-auto max-w-350 px-4 md:px-24">
@@ -54,6 +54,13 @@ export default function BlogDetails({ post }) {
               </span>
               <p className="text-sm text-gray-700">Comments</p>
             </div>
+            <span className="h-4 border border-r text-black"></span>
+            <div className="flex gap-1">
+              <span className="inline-block text-gray-600">
+                <Eye width={18} />
+              </span>
+              <p className="text-sm text-gray-700">5 Minutes Read</p>
+            </div>
           </div>
 
           <Image
@@ -68,20 +75,20 @@ export default function BlogDetails({ post }) {
           </p>
         </div>
         <div className="mt-16 mb-10 rounded-md border-t border-gray-100 p-5 shadow-sm">
-          <div className="w-full md:w-1/2">
+          <div className="w-full lg:w-1/2">
             <h1 className="text-3xl font-semibold text-indigo-300">
               Write a Comment
             </h1>
             <form className="mt-5 w-full">
               <textarea
-                className="mb-5 h-40 w-full resize-none rounded-md border border-gray-300 bg-slate-50 p-2 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"
+                className="mb-5 h-40 w-full resize-none rounded-md border border-gray-300 bg-slate-50 p-2 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="Enter message"
               />
               <Button
                 type="submit"
-                className="w-44 py-5 cursor-pointer bg-indigo-500 text-white hover:bg-[#6a67fc]"
+                className="w-44 cursor-pointer bg-indigo-500 py-5 text-white hover:bg-[#6a67fc]"
               >
-                Post Comment
+                 Comment
               </Button>
             </form>
           </div>

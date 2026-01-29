@@ -1,16 +1,11 @@
-import { createMiddleware } from "@arcjet/next";
 import { NextResponse } from "next/server";
-import aj from "./lib/arcjet";
 import { verifyAuth } from "./lib/auth";
 
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|healthz).*)"],
 };
 
-const arcjetMiddleware = createMiddleware(aj);
-
 export async function middleware(request) {
-  const arcjetResponse = await arcjetMiddleware(request);
   let response = NextResponse.next();
 
   // protected routes list
@@ -35,14 +30,5 @@ export async function middleware(request) {
     }
   }
 
-  if (arcjetResponse?.headers) {
-    arcjetResponse.headers.forEach((value, key) => {
-      response.headers.set(key, value);
-    });
-  }
-
-  if (arcjetResponse && arcjetResponse.status !== 200) {
-    return arcjetResponse;
-  }
   return response;
 }

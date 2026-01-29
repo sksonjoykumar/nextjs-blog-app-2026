@@ -8,11 +8,10 @@ export default async function CommonLayout({ children }) {
   const user = await verifyAuth(token);
   return (
     <>
-    
-      <div className="">
+      <div>
         {user && <Header />}
         {children}
-        <Footer />
+        {user && <Footer />}
       </div>
     </>
   );

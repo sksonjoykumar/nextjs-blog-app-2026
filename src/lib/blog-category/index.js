@@ -14,4 +14,6 @@ export const blogCategory = [
   { key: "videoEditing", value: "Video Editing" },
   { key: "fashion", value: "Fashion" },
   { key: "socialMedia", value: "Social Media" },
+  { key: "game", value: "Game" },
+  { key: "others", value: "Others" },
 ];
