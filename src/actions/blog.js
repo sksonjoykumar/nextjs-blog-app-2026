@@ -142,3 +142,16 @@ export async function getBlogPostByIdAction(id) {
     };
   }
 }
+
+// updateBlogPostAction
+export async function updateBlogPostAction(id, data) {
+  const token = (await cookies()).get("token")?.value;
+  const user = await verifyAuth(token);
+
+  if (!user) {
+    return {
+      error: "Unauthorized user",
+      status: 401,
+    };
+  }
+}

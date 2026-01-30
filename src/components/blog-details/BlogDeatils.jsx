@@ -3,6 +3,8 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Clock, Eye, MessageCircleMore } from "lucide-react";
 import Image from "next/image";
+import Delete from "../delete-blog/Delete";
+import UpdateBlog from "../update-Blog/UpdateBlog";
 
 export default function BlogDetails({ post }) {
   function htmlToText(html = "") {
@@ -15,14 +17,27 @@ export default function BlogDetails({ post }) {
       .trim();
   }
 
+  // userId
+  const userId = post?.author?._id;
+
   console.log(post);
+  console.log(userId);
+
   return (
     <>
       <div className="mx-auto max-w-350 px-4 md:px-24">
         <div className="mb my-10 rounded-md border-t border-gray-100 p-5 shadow-sm">
-          <h1 className="text-center text-4xl font-semibold text-gray-700 sm:text-left">
-            {post?.title}
-          </h1>
+          <div className="flex flex-wrap justify-center gap-3 sm:justify-between">
+            <h1 className="text-4xl font-semibold text-gray-700 sm:text-left">
+              {post?.title}
+            </h1>
+            {userId === post.author._id && (
+              <div className="flex items-center gap-4">
+                <UpdateBlog />
+                <Delete />
+              </div>
+            )}
+          </div>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-5 sm:justify-start">
             <div className="flex items-center gap-2">

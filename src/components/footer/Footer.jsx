@@ -6,6 +6,7 @@ import {
   Instagram,
   Linkedin,
   Search,
+  X,
   Youtube,
 } from "lucide-react";
 import Link from "next/link";
@@ -54,11 +55,11 @@ const Footer = () => {
             {/* Tags */}
 
             <div className="">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+              <h3 className="text-lg  font-semibold text-gray-800 dark:text-gray-200">
                 Social Media
               </h3>
 
-              <ul className="mt-4 flex flex-wrap gap-2 text-gray-700 dark:text-gray-300">
+              <ul className="mt-4 flex flex-wrap  gap-2 text-gray-700 dark:text-gray-300">
                 <li className="cursor-pointer rounded-sm border p-1.5 text-sm transition-all duration-200 hover:border-indigo-500 hover:text-indigo-500">
                   <a href="#">
                     <Facebook />
@@ -77,6 +78,11 @@ const Footer = () => {
                 <li className="cursor-pointer rounded-sm border p-1.5 text-sm transition-all duration-200 hover:border-indigo-500 hover:text-indigo-500">
                   <a href="#">
                     <Linkedin />
+                  </a>
+                </li>
+                <li className="cursor-pointer rounded-sm border p-1.5 text-sm transition-all duration-200 hover:border-indigo-500 hover:text-indigo-500">
+                  <a href="#">
+                    <X />
                   </a>
                 </li>
               </ul>
