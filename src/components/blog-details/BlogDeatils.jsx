@@ -5,17 +5,16 @@ import { Clock, Eye, MessageCircleMore } from "lucide-react";
 import Image from "next/image";
 
 export default function BlogDetails({ post }) {
-  
   function htmlToText(html = "") {
     return html
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
-    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-    .replace(/<[^>]+>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
   }
-  
+
   console.log(post);
   return (
     <>
@@ -82,13 +81,13 @@ export default function BlogDetails({ post }) {
             <form className="mt-5 w-full">
               <textarea
                 className="mb-5 h-40 w-full resize-none rounded-md border border-gray-300 bg-slate-50 p-2 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                placeholder="Enter message"
+                placeholder="Write Comment"
               />
               <Button
                 type="submit"
                 className="w-44 cursor-pointer bg-indigo-500 py-5 text-white hover:bg-[#6a67fc]"
               >
-                 Comment
+                Comment
               </Button>
             </form>
           </div>
