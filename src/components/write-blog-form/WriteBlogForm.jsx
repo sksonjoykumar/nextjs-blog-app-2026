@@ -11,7 +11,7 @@ import { blogCategory } from "@/src/lib/blog-category";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import "react-quill-new/dist/quill.bubble.css";
 import { toast } from "sonner";
@@ -79,7 +79,7 @@ const isSuspiciousContent = (data) => {
 };
 
 // WriteBlogForm component
-export default function WriteBlogForm({ user }) {
+export default function WriteBlogForm({ user, post }) {
   const [isLoading, setIsLoading] = useState(false);
   const quillRef = useRef(null);
   const router = useRouter();
@@ -89,6 +89,7 @@ export default function WriteBlogForm({ user }) {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(blogPostSchema),
@@ -104,6 +105,20 @@ export default function WriteBlogForm({ user }) {
   const category = watch("category");
   const coverImage = watch("coverImage");
 
+  useEffect(() => {
+    if (post) {
+      reset({
+        title: post.title,
+        content: post.content,
+        category: post.category,
+        coverImage: post.coverImage,
+      });
+    }
+  }, [post, reset]);
+
+  const isEditMode = Boolean(post?._id);
+
+  console.log("User", user);
   const onBlogSubmit = async (data) => {
     const cleanContent = data.content.replace(/<p><br><\/p>/g, "").trim();
 
@@ -114,23 +129,29 @@ export default function WriteBlogForm({ user }) {
 
     setIsLoading(true);
     try {
-      const isSuspiciousInput = isSuspiciousContent(data);
-      const result = await fetch("/api/create-blog-post", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          "x-arcjet-suspicious": isSuspiciousInput.toString(),
-        },
+      const endpoint = isEditMode
+        ? `/api/update-blog-post/${post._id}`
+        : `/api/create-blog-post`;
+
+      const method = isEditMode ? "PUT" : "POST";
+      const result = await fetch(endpoint, {
+        method,
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       }).then((res) => res.json());
-      console.log(data);
 
-      if (result.success) {
-        toast.success("Success", {
-          description: result.success,
-        });
-        router.push("/");
+      if (result?.error) {
+        toast.error(result.error);
+        return;
       }
+
+      toast.success(
+        isEditMode
+          ? "Blog updated successfully"
+          : "Blog published successfully",
+      );
+
+      router.push(isEditMode ? `/blog/${post._id}` : "/");
     } catch (error) {
       toast.error("Error", {
         description: "Some error occurred",
@@ -169,7 +190,13 @@ export default function WriteBlogForm({ user }) {
                 type="submit"
                 className="h-8 cursor-pointer rounded-3xl bg-indigo-500 px-4 py-1.5 text-sm text-white hover:bg-indigo-600"
               >
-                {isLoading ? "Publishing..." : "Publish"}
+                {isLoading
+                  ? isEditMode
+                    ? "Updating..."
+                    : "Publishing..."
+                  : isEditMode
+                    ? "Update"
+                    : "Publish"}
               </button>
             </div>
 

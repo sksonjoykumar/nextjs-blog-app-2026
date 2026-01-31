@@ -6,7 +6,7 @@ import Image from "next/image";
 import Delete from "../delete-blog/Delete";
 import UpdateBlog from "../update-Blog/UpdateBlog";
 
-export default function BlogDetails({ post }) {
+export default function BlogDetails({ user, post }) {
   function htmlToText(html = "") {
     return html
       .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
@@ -17,11 +17,12 @@ export default function BlogDetails({ post }) {
       .trim();
   }
 
-  // userId
-  const userId = post?.author?._id;
+  const currentUserId = user?.userId;
+  const authorId =
+    typeof post.author === "string" ? post.author : post.author?._id;
 
   console.log(post);
-  console.log(userId);
+  console.log(user);
 
   return (
     <>
@@ -31,10 +32,10 @@ export default function BlogDetails({ post }) {
             <h1 className="text-4xl font-semibold text-gray-700 sm:text-left">
               {post?.title}
             </h1>
-            {userId === post.author._id && (
+            {currentUserId === authorId && (
               <div className="flex items-center gap-4">
-                <UpdateBlog />
-                <Delete />
+                <UpdateBlog postId={post._id} />
+                <Delete postId={post._id} />
               </div>
             )}
           </div>

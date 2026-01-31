@@ -154,4 +154,107 @@ export async function updateBlogPostAction(id, data) {
       status: 401,
     };
   }
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return {
+      error: "Invalid blog Id",
+      status: 400,
+    };
+  }
+
+  const validateFields = blogPostSchema.safeParse(data);
+
+  if (!validateFields.success) {
+    return {
+      error: validateFields.error.errors[0].message,
+    };
+  }
+
+  try {
+    await connectToDB();
+
+    const post = await BlogPost.findById(id);
+    if (!post) {
+      return {
+        error: "Blog post not found",
+        status: 404,
+      };
+    }
+
+    if (post.author.toString() !== user.userId) {
+      return {
+        error: "Forbidden: You cannot update this post",
+        status: 403,
+      };
+    }
+
+    const { title, content, coverImage, category } = validateFields.data;
+    post.title = title;
+    post.content = content;
+    post.coverImage = coverImage;
+    post.category = category;
+
+    await post.save();
+
+    revalidatePath("/");
+    revalidatePath(`/blog/${id}`);
+
+    return {
+      success: true,
+      post,
+    };
+  } catch (error) {
+    console.error("UPDATE BLOG ERROR:", error);
+    return {
+      error: "Database error",
+    };
+  }
+}
+
+// deleteBlogPostAction
+export async function deleteBlogPostAction(id) {
+  const token = (await cookies()).get("token")?.value;
+  const user = await verifyAuth(token);
+
+  if (!user) {
+    return {
+      error: "Unauthorized user",
+      status: 401,
+    };
+  }
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return {
+      error: "Invalid blog Id",
+      status: 400,
+    };
+  }
+
+  try {
+    // await connectToDB();
+    // const post = await BlogPost.findById(id);
+    // if (!post) {
+    //   return { error: "Blog post not found", status: 404 };
+    // }
+    // if (post.author.toString() !== user.userId) {
+    //   return { error: "Forbidden: You cannot delete this post", status: 403 };
+    // }
+
+    // await BlogPost.findByIdAndDelete(id);
+
+    await connectToDB();
+    const post = await BlogPost.findById(id);
+    if (!post) throw new Error("Post not found");
+
+    if (post.author.toString() !== user.userId) throw new Error("Forbidden");
+
+    await BlogPost.findByIdAndDelete(id);
+
+    revalidatePath("/");
+    revalidatePath("/blog");
+
+    return { success: true };
+  } catch (error) {
+    console.error("DELETE BLOG ERROR:", error);
+    return { error: "Database error" };
+  }
 }
