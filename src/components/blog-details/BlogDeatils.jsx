@@ -21,14 +21,11 @@ export default function BlogDetails({ user, post }) {
   const authorId =
     typeof post.author === "string" ? post.author : post.author?._id;
 
-  console.log(post);
-  console.log(user);
-
   return (
     <>
       <div className="mx-auto max-w-350 px-4 md:px-24">
         <div className="mb my-10 rounded-md border-t border-gray-100 p-5 shadow-sm">
-          <div className="flex flex-wrap justify-center gap-3 sm:justify-between">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:justify-between">
             <h1 className="text-4xl font-semibold text-gray-700 sm:text-left">
               {post?.title}
             </h1>
@@ -63,14 +60,14 @@ export default function BlogDetails({ user, post }) {
               </p>
             </div>
             <span className="h-4 border border-r text-black"></span>
-            <div className="flex gap-1">
+            <div className="flex items-center gap-1">
               <span className="inline-block text-gray-600">
                 <MessageCircleMore width={18} />
               </span>
               <p className="text-sm text-gray-700">Comments</p>
             </div>
             <span className="h-4 border border-r text-black"></span>
-            <div className="flex gap-1">
+            <div className="flex items-center gap-1">
               <span className="inline-block text-gray-600">
                 <Eye width={18} />
               </span>

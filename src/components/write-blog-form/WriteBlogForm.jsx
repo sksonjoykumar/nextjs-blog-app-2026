@@ -65,21 +65,8 @@ const blogPostSchema = z.object({
   coverImage: z.string().min(1, "Image is required"),
 });
 
-// isSuspiciousContent
-const isSuspiciousContent = (data) => {
-  const suspiciousPatters = [
-    /<scrip>/i,
-    /javaScript:/i,
-    /onload=/i,
-    /onclick=/i,
-    /'.*OR.*'/i,
-    /UNION SELECT/i,
-  ];
-  return suspiciousPatters.some((pattern) => pattern.test(data.content));
-};
-
 // WriteBlogForm component
-export default function WriteBlogForm({ user, post }) {
+export default function WriteBlogForm({ post }) {
   const [isLoading, setIsLoading] = useState(false);
   const quillRef = useRef(null);
   const router = useRouter();
@@ -118,7 +105,7 @@ export default function WriteBlogForm({ user, post }) {
 
   const isEditMode = Boolean(post?._id);
 
-  console.log("User", user);
+  // onBlogSubmit
   const onBlogSubmit = async (data) => {
     const cleanContent = data.content.replace(/<p><br><\/p>/g, "").trim();
 
@@ -137,9 +124,9 @@ export default function WriteBlogForm({ user, post }) {
       const result = await fetch(endpoint, {
         method,
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data),
       }).then((res) => res.json());
-
       if (result?.error) {
         toast.error(result.error);
         return;
@@ -161,6 +148,7 @@ export default function WriteBlogForm({ user, post }) {
     }
   };
 
+  // isBtnDisabled
   const isBtnDisabled = () => {
     return !title || !content || !category || !coverImage;
   };

@@ -3,7 +3,7 @@ import { updateBlogPostAction } from "@/src/actions/blog";
 export async function PUT(req, { params }) {
   try {
     const body = await req.json();
-    const { id } = params;
+    const { id } = await params;
 
     const result = await updateBlogPostAction(id, body);
     return Response.json(result);

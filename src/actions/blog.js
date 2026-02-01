@@ -162,7 +162,8 @@ export async function updateBlogPostAction(id, data) {
     };
   }
 
-  const validateFields = blogPostSchema.safeParse(data);
+  const updateBlogPostSchema = blogPostSchema.partial();
+  const validateFields = updateBlogPostSchema.safeParse(data);
 
   if (!validateFields.success) {
     return {
@@ -181,18 +182,14 @@ export async function updateBlogPostAction(id, data) {
       };
     }
 
-    if (post.author.toString() !== user.userId) {
+    if (post.author.toString() !== String(user.userId)) {
       return {
         error: "Forbidden: You cannot update this post",
         status: 403,
       };
     }
 
-    const { title, content, coverImage, category } = validateFields.data;
-    post.title = title;
-    post.content = content;
-    post.coverImage = coverImage;
-    post.category = category;
+    Object.assign(post, validateFields.data);
 
     await post.save();
 
@@ -230,17 +227,6 @@ export async function deleteBlogPostAction(id) {
   }
 
   try {
-    // await connectToDB();
-    // const post = await BlogPost.findById(id);
-    // if (!post) {
-    //   return { error: "Blog post not found", status: 404 };
-    // }
-    // if (post.author.toString() !== user.userId) {
-    //   return { error: "Forbidden: You cannot delete this post", status: 403 };
-    // }
-
-    // await BlogPost.findByIdAndDelete(id);
-
     await connectToDB();
     const post = await BlogPost.findById(id);
     if (!post) throw new Error("Post not found");
