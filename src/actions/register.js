@@ -1,8 +1,6 @@
 "use server";
-import { request } from "@arcjet/next";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import aj from "../lib/arcjet";
 import connectToDB from "../lib/db";
 import User from "../models/User";
 
