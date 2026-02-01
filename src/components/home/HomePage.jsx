@@ -13,6 +13,13 @@ export default function HomePage({ posts }) {
   const [isGridView, setIsGridView] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("");
 
+  // Pagination
+  const POSTS_PER_PAGE = 6;
+
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+  const searchQuery = searchParams.get("q") || "";
+
   // safePosts
   const safePosts = Array.isArray(posts)
     ? posts
@@ -22,33 +29,7 @@ export default function HomePage({ posts }) {
         ? posts.data
         : [];
 
-  // categories
-  const categories = useMemo(() => {
-    const all = safePosts.map((p) => p.category).filter(Boolean);
-    return ["All", ...new Set(all)];
-  }, [safePosts]);
-
-  // filteredPosts
-  const filteredPosts = useMemo(() => {
-    if (!selectedCategory || selectedCategory === "All") {
-      return safePosts;
-    }
-    return safePosts.filter(
-      (post) => post.category?.toLowerCase() === selectedCategory.toLowerCase(),
-    );
-  }, [safePosts, selectedCategory]);
-
-  // Pagination
-  const POSTS_PER_PAGE = 6;
-
-  const searchParams = useSearchParams();
-  const page = Number(searchParams.get("page")) || 1;
-
-  const paginatedPosts = useMemo(() => {
-    const start = (page - 1) * POSTS_PER_PAGE;
-    return filteredPosts.slice(start, start + POSTS_PER_PAGE);
-  }, [filteredPosts, page]);
-
+  // htmlToText
   function htmlToText(html = "") {
     return html
       .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
@@ -58,6 +39,51 @@ export default function HomePage({ posts }) {
       .replace(/\s+/g, " ")
       .trim();
   }
+
+  // categories
+  const categories = useMemo(() => {
+    const all = safePosts.map((p) => p.category).filter(Boolean);
+    return ["All", ...new Set(all)];
+  }, [safePosts]);
+
+  // filteredPosts
+  const filteredPosts = useMemo(() => {
+    let result = safePosts;
+
+    // category filter
+    if (selectedCategory && selectedCategory !== "All") {
+      result = result.filter(
+        (post) =>
+          post.category?.toLowerCase() === selectedCategory.toLowerCase(),
+      );
+    }
+
+    // 🔍 search filter
+    if (searchQuery) {
+      result = result.filter((post) =>
+        `${post.title} ${post.category} ${htmlToText(post.content)}`
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()),
+      );
+    }
+
+    return result;
+  }, [safePosts, selectedCategory, searchQuery]);
+
+  // handleCategoryChange
+  function handleCategoryChange(category) {
+    setSelectedCategory(category);
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", "1");
+
+    router.push(`/?${params.toString()}`);
+  }
+  // paginatedPosts
+  const paginatedPosts = useMemo(() => {
+    const start = (page - 1) * POSTS_PER_PAGE;
+    return filteredPosts.slice(start, start + POSTS_PER_PAGE);
+  }, [filteredPosts, page]);
 
   // previewText
   const previewText = (html, length = 50) =>
@@ -223,7 +249,7 @@ export default function HomePage({ posts }) {
           <Categories
             categories={categories}
             selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
+            setSelectedCategory={handleCategoryChange}
           />
           {/* LatestBlog */}
           <LatestBlog latestBlogs={latestBlogs} previewText={previewText} />

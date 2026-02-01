@@ -12,15 +12,35 @@ import { Input } from "@/components/ui/input";
 import { logoutUserAction } from "@/src/actions/logOut";
 import { Activity, LogOut, Menu, Search, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-export default function Header() {
+export default function Header({ posts }) {
   const [toggleMenu, setToggleMenu] = useState(false);
 
   const path = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
+  const search = searchParams.get("q") || "";
+
+  // handleSearch
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (value) {
+      params.set("q", value);
+      params.set("page", "1");
+    } else {
+      params.delete("q");
+      params.set("page", "1");
+    }
+
+    router.push(`/?${params.toString()}`);
+  };
+
+  // handleLogout function
   async function handleLogout() {
     const result = await logoutUserAction();
     if (result.success) {
@@ -44,6 +64,8 @@ export default function Header() {
             <div className="relative w-96">
               <Search className="absolute top-2 left-1.5 h-5 w-5 text-gray-600" />
               <Input
+                value={search}
+                onChange={handleSearch}
                 type="search"
                 className="border border-gray-300 py-4.5 pl-8 text-balance text-gray-900 shadow-none focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
                 placeholder="Search blogs..."
