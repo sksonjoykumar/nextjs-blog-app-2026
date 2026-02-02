@@ -32,7 +32,7 @@ export default function ContactPage() {
                 recusandae, repellat eos dignissimos incidunt voluptas libero
                 consequatur consectetur placeat doloribus, praesentium nisi ad!
               </p>
-              <div className="mt-8 flex justify-between gap-10">
+              <div className="mt-8 flex justify-between flex-wrap gap-10">
                 <div>
                   <h3 className="font-semibold text-balance text-gray-700">
                     Dhaka
