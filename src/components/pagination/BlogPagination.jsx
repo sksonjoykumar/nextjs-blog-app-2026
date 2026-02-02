@@ -29,7 +29,7 @@ export default function BlogPagination({ posts }) {
   return (
     <Pagination className="mt-10">
       <PaginationContent>
-        <PaginationItem>
+        <PaginationItem className="cursor-pointer">
           <PaginationPrevious
             onClick={() => goToPage(page - 1)}
             className={page === 1 ? "pointer-events-none opacity-50" : ""}
@@ -39,7 +39,7 @@ export default function BlogPagination({ posts }) {
         {[...Array(totalPages)].map((_, i) => {
           const pageNumber = i + 1;
           return (
-            <PaginationItem key={pageNumber}>
+            <PaginationItem key={pageNumber} className="cursor-pointer">
               <PaginationLink
                 isActive={page === pageNumber}
                 onClick={() => goToPage(pageNumber)}
@@ -50,7 +50,7 @@ export default function BlogPagination({ posts }) {
           );
         })}
 
-        <PaginationItem>
+        <PaginationItem className="cursor-pointer">
           <PaginationNext
             onClick={() => goToPage(page + 1)}
             className={
